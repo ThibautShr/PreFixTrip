@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>PreFixTrip</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content=""/>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <meta content="fr" http-equiv="Content-Language"/>
+
+    <!-- THEME STYLESHEETS -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet/less" href="app/css/app.less"/>
+
+</head>
+
+<body class="index-background" ng-app="PreFixTripApp" ng-controller="MainCtrl">
+
+  <h1 class="align-center">PreFixTrip</h1>
+  <h4 class="align-center margin-top-30px">Trop bête pour gérer tes dettes ?</h4>
+  <h5 class="align-center margin-top-30px">Connectez vous !</h5>
+  
+  <center>
+    <div id="login_section">
+      <div id="mail_section" class="white-box margin-top-30px">
+        <input type="text" id="mail_field_login" ng-model="$parent.mail_field_login" placeholder="Adresse mail" class="form-control margin-top-30px"/>
+        <input type="password" id="password_field_login" ng-model="$parent.password_field_login" placeholder="Mot de passe" class="form-control margin-top-30px"/>
+        <h3 id="error_mail_login" class="red display-none"><i class="fa fa-warning"></i> Adresse mail inconnu.</h3>
+        <h3 id="invalid_mail_login" class="red display-none"><i class="fa fa-warning"></i> Adresse mail invalide.</h3>
+        <h3 id="error_password_login" class="red display-none"><i class="fa fa-warning"></i> Mauvais mot de passe.</h3><br/>
+        <button id="next_button" class="btn btn-info margin-top-10px" ng-click="check_login()">Connection</button>
+      </div>
+
+      <h3 id="link_make_account" onclick="account()" class="pointer">Créer un compte</h3>
+    </div>
+
+    <div id="account_section" class="display-none">
+      <div class="white-box margin-top-30px">
+        <input type="mail" id="mail_field_registration" ng-model="$parent.mail_field_registration" placeholder="Address Mail" class="form-control margin-top-10px"/>
+        <h3 id="error_mail_registration" class="red display-none"><i class="fa fa-warning"></i> Adresse mail déja utilisé.</h3><br/>
+        <input type="password" id="password_field_registration" ng-model="$parent.password_field_registration" placeholder="Mot de passe" class="form-control margin-top-10px"/>
+        <input type="password" id="confirm_password_field_registration" ng-model="$parent.confirm_password_field_registration" placeholder="Confirmation" class="form-control margin-top-10px"/>
+        <h3 id="error_confirmation_registration" class="red display-none"><i class="fa fa-warning"></i> Erreur de confirmation.</h3><br/>
+        <button id="registration_button" class="btn btn-info margin-top-10px" ng-click="makeAccount()">Créer</button>
+      </div>
+
+      <h3 id="link_login" onclick="login()" class="pointer">Connectez vous</h3>
+    </div>
+
+  </center>
+
+</body>
+
+<!-- LESS SCRIPT -->
+<script type="text/javascript" src="bower_components/less/dist/less.min.js" type="text/javascript"></script>
+
+<!-- JQUERY -->
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- ANGULAR -->
+<script type="text/javascript" src="bower_components/angular/angular.js"></script>
+
+<!-- APP -->
+<script type="text/javascript" src="app/js/app.js"></script>
+
+<!-- MAIN SCRIPT -->
+<script type="text/javascript" src="app/js/index.js"></script>
+
+</html>

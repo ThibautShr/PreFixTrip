@@ -1,0 +1,346 @@
+/*========================== FONTS ==========================*/
+
+@font-face { 
+    font-family: 'Raleway';
+    src: url('../fonts/Raleway/Raleway.ttf');
+}
+
+@font-face { 
+    font-family: 'Raleway-MediumItalic';
+    src: url('../fonts/Raleway/Raleway-MediumItalic.ttf');
+}
+
+@font-face { 
+    font-family: 'Raleway-Thin';
+    src: url('../fonts/Raleway/Raleway-Thin.ttf');
+}
+
+@font-face { 
+    font-family: 'Raleway-Bold';
+    src: url('../fonts/Raleway/Raleway-Bold.ttf');
+}
+
+/* ======================== CONTENT ========================*/
+
+html{
+	margin-top: 0px;
+	font-family: 'Raleway';
+	height: 100%;
+	overflow-x: hidden;
+}
+
+header{
+	padding:10px;
+	background:#111;
+	color:white;
+	font-weight:bold;	
+}
+
+body{
+	margin-top: 0px;
+	height: 100%;
+}
+
+.index-background{
+	//background: url("../../assets/images/background/violate.jpg");
+	//background: url("../../assets/images/background/blue.jpg");
+	background: url("../../assets/images/background/city.jpg");
+	//background: url("../../assets/images/background/kiwi.jpg");
+	background-attachment: fixed;
+	background-size: 100% 100%;
+}
+
+.home-background{
+	background: url("../../assets/images/background/grid.png");
+	background-repeat:repeat;
+	background-attachment: fixed;
+}
+
+.panel-left{
+	height:100%;
+	background: url("../../assets/images/background/random_grey.png");
+	//position:fixed;
+	//background:rgba(0,0,0,0.2);	
+	//border-right:1px #CCC solid;
+	padding:5px;
+}
+
+@media screen and (max-width: 992px) {
+	.panel-left{
+		display: none;
+	}
+}
+
+.panel-right{
+	position:relative;
+	padding:10px;
+	height:100%;
+	//background:rgb(0,0,255);	
+}
+
+.menu-container{
+	position:relative;
+	background:#fff;
+	box-shadow:1px 1px 3px rgba(0,0,0,0.5);
+	border:1px #ddd solid;
+}
+
+.menu-container li{
+	font-family: 'Raleway-Thin';
+	font-size:18px;
+	color:#333;
+	cursor:pointer;
+	padding:10px;
+	text-decoration:none;
+	display:inline-block;
+	
+	&:hover{ 
+		background : #efefef; 
+		color : #111;
+	}
+}
+
+.title-box{
+	color:white;
+	font-weight:bold;
+	text-align:center;
+	padding:5px;
+	//background:rgba(0,0,0,0.5);
+	//border-bottom:1px rgba(200,200,200,0.3) solid;
+}
+
+.black-box{
+	background:rgba(0,0,0,0.6);
+	color:white;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+
+.display-none{
+	display:none;
+}
+
+/*===================== TEXT =============================*/
+
+h1{
+	font-family: 'Raleway';
+	color: white;
+	font-size: 30px;
+}
+
+
+h2{
+	font-family: 'Raleway-MediumItalic';
+	color: white;
+	font-size: 24px;
+}
+
+h3{
+	font-family: 'Raleway-MediumItalic';
+	color: white;
+	font-size: 14px;
+}
+
+h4{
+	font-family: 'Raleway-Thin';
+	color: white;
+	font-size: 34px;	
+}
+
+h5{
+	font-family: 'Raleway';
+	color: white;
+	font-size: 24px;	
+}
+
+.align-center{
+	text-align: center;
+}
+
+.text-thin{
+	font-family: 'Raleway-Thin';
+}
+
+.uppercase{
+	text-transform:uppercase;
+}
+
+/*===================== FONT SIZE =====================*/
+
+.font-size-40px{
+	font-size: 40px;
+}
+
+.font-size-70px{
+	font-size: 70px;
+}
+
+/*===================== POSITION =========================*/
+
+.margin-top-5px{
+	margin-top:5px;
+}
+
+.margin-top-10px{
+	margin-top:10px;
+}
+
+.margin-top-15px{
+	margin-top:15px;
+}
+
+.margin-top-20px{
+	margin-top:20px;
+}
+
+.margin-top-25px{
+	margin-top:25px;
+}
+
+.margin-top-30px{
+	margin-top:30px;
+}
+
+.margin-left-5px{
+	margin-left:5px;
+}
+
+.margin-left-15px{
+	margin-left:15px;
+}
+
+.vertical-align-middle{
+	vertical-align: middle;
+}
+
+.pos-right{
+	position:absolute;
+	right:5px;	
+}
+
+/*===================== PADDING =========================*/
+
+.padding-left-10{
+	padding-left: 10px;
+}
+
+/*===================== HEIGHT & WIDTH =====================*/
+
+.width-100px{
+	width: 100px;
+}
+
+.width-210px{
+	width: 210px;
+}
+
+.width-100pc{
+	width: 100%;
+}
+
+.height-100px{
+	height: 100px;
+}
+
+.height-100pc{
+	min-height:100%;	
+}
+
+/*===================== OTHER ==========================*/
+
+.inline-box{
+	display: inline-block;
+	vertical-align: top;
+}
+
+.pointer{
+	cursor: pointer;
+}
+
+.circle{
+	border-radius: 50%;
+}
+
+/* ============================ POPUP ============================ */
+
+.popup{
+	z-index:3;
+	position: fixed;
+	background: rgba(255,255,255,1);
+	border-radius: 5px;
+	border: 1px #eee solid;
+	box-shadow: 2px 2px 5px rgba(0,0,0,.5);
+	padding: 10px;
+	text-align: center;
+	color: #333;
+	font-family: "Raleway-MediumItalic";
+}
+
+/* ============================ BOXES ============================ */
+
+.white-box{
+	background: white;
+	padding: 20px;
+	border: 1px #aaa solid;
+	box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+	width: 25%;
+}
+
+
+/* ===================== BACKGROUND ==================== */
+
+.background-white{
+	background: #fff;
+}
+
+.background-red{
+	background: #d34541;
+}
+
+.background-dark-green{
+	background: #004d40;
+}
+
+.background-green{
+	background: #17b881;
+}
+
+.background-blue{
+	background: #2f97b6;
+}
+
+.background-orange{
+	background: #ed8b34;
+} 
+
+.background-ddd{
+	background: #ddd;
+}
+
+
+/* ======================= COLOR ====================== */
+
+.white{
+	color: white;
+}
+
+.red{
+	color: red;
+}
+
+.green{
+	color: #17b881;
+}
+
+.blue{
+	color: #06F;
+}
+
+.sky-blue{
+	color : #2cacd3;
+}
+
+.color-aaa{
+	color: #aaa;
+}
