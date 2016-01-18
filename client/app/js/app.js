@@ -64,12 +64,13 @@ app.controller('MainCtrl',function($rootScope, $http){
 		   $rootScope.password_field_registration != undefined &&
 		   $rootScope.confirm_password_field_registration != undefined ){
 			if($rootScope.password_field_registration == $rootScope.confirm_password_field_registration){ 
-				
 				new_user = {'email': $rootScope.mail_field_registration,
 							'password' : $rootScope.password_field_registration};
 				
+				//make account
 				$http.post('api/users/', new_user).
 				success(function(data) {
+					//sign in
 					$rootScope.mail_field_login = $rootScope.mail_field_registration;
 					$rootScope.password_field_login = $rootScope.password_field_registration;
 					$rootScope.check_login();
@@ -138,32 +139,35 @@ app.controller('HomeCtrl', function($scope, $http){
 	$scope.loadGroups();
 	
 	$scope.addGroup = function(){
-		console.assert($scope.newGroupName != "");
-		var newGroup = {
-			'name' : $scope.newGroupName,
-			'users' : [
-				{
-				'_id' : $scope.user['_id']
-				}
-			]
-		};
-		
-		//alert(JSON.stringify(newGroup));
-		
-		$http.post('api/group/',
-			newGroup,{ 
-			headers: {'Authorization' : 'Bearer ' + $scope.token}}).
-			success(function(data) {
-				//alert('success : ' + data);
-				//alert(JSON.stringify(data));
-				$scope.groups.push(data);
-				$scope.newGroupName = "";
-			}).
-			error(function(resultat, statut, erreur){
-				if(statut == "401")
-					$scope.session_inactive();
-				alert(statut);
-				alert(JSON.stringify(resultat,null,4));
-			}.bind(this));	
+		if($scope.newGroupName != undefined){
+			var newGroup = {
+				'name' : $scope.newGroupName,
+				'users' : [
+					{
+					'_id' : $scope.user['_id']
+					}
+				]
+			};
+			
+			//alert(JSON.stringify(newGroup));
+			
+			$http.post('api/group/',
+				newGroup,{ 
+				headers: {'Authorization' : 'Bearer ' + $scope.token}}).
+				success(function(data) {
+					//alert('success : ' + data);
+					//alert(JSON.stringify(data));
+					$scope.groups.push(data);
+					$scope.newGroupName = undefined;
+				}).
+				error(function(resultat, statut, erreur){
+					if(statut == "401")
+						$scope.session_inactive();
+					alert(statut);
+					alert(JSON.stringify(resultat,null,4));
+				}.bind(this));
+		}
+		else
+			alert('Veuillez indiquer le nom du groupe !');
 	}
 });
