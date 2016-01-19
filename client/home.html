@@ -11,7 +11,8 @@
     
     <!-- THEME STYLESHEETS -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
-    <link rel="stylesheet/less" type="text/css" href="app/css/app.less"/>
+    <link rel="stylesheet" type="text/css" href="app/css/app.css"/>
+    <link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.min.css"/>
     
 </head>
 
@@ -33,10 +34,15 @@
         	
         		<div class="margin-top-20px title-box">Groupes</div>         
                              
-                <div ng-repeat="group in groups" class="col-md-12 black-box margin-top-5px pointer">{{group['name']}}</div>
-                
+                <div ng-repeat="group in groups" 
+                     ng-class="{ 'group-active' :(indexCurrentGroup == $index) }" 
+                     ng-click="selectGroup($index)" 
+                     class="col-md-12 black-box margin-top-5px pointer">{{group['name']}}</div>
+                                    
                 <input class="form-control margin-top-5px" type="text" placeholder="Nouveau groupe" ng-model="newGroupName"/>
-                <button class="btn btn-info margin-top-5px" ng-click="addGroup()">Ajouter</button>
+                <input class="form-control margin-top-5px" type="password" placeholder="Mot de passe" ng-model="newGroupPassword"/>
+                <button class="btn btn-info margin-top-5px" ng-click="addGroup()">Créer</button>
+                <button class="btn btn-warning margin-top-5px" ng-click="rejoinGroup()">Rejoindre</button>
     
             </center>
          </div>
@@ -44,13 +50,17 @@
         
         <div class="col-md-offset-2 col-md-10 panel-right">
             <center>
-                <ul class="menu-container">
-                    <li>Onglet 1</li>
-                    <li>Onglet 2</li>
-                    <li>Onglet 3</li>
-                    <li>Onglet 4</li>
+                <ul class="menu-container white-box">
+                    <li ng-class="{ 'active' : page == 'dashboard.html' }" ng-click="page=''">Tableau de bord</li>
+                    <li ng-class="{ 'active' : page == 'users.html' }" ng-click="page='users.html'">Membres</li>
+                    <li ng-class="{ 'active' : page == 'bills.html' }" ng-click="page=''">Factures</li>
+                    <li ng-class="{ 'active' : page == 'spending.html' }" ng-click="page=''">Dépences</li>
                 </ul>
             </center>
+            
+            <div ng-include src="page">
+            
+            </div>
         </div>
     </div>
     

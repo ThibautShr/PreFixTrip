@@ -22,15 +22,15 @@ exports.index = function(req, res) {
 
 exports.search = function(req, res) {
 	var query = {};
-	if(req.query.email){
-		query = {"email":req.query.email};
-		User.find(query, "-salt -hashedPassword", function (err, users) {
+	if(req.query.pseudo){
+		query = {"pseudo":req.query.pseudo};
+		User.find(query, function (err, users) {
 			if(err) return res.status(500).send(err);
 			res.status(200).json(users);
 		});
-	} else {
-		res.status(403).send("Forbidden");
-	}
+	} 
+	else
+		res.status(403).send("Forbidden : " + req.query.pseudo);
 };
 
 /**

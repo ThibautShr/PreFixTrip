@@ -10,8 +10,15 @@ exports.index = function(req, res) {
   });
 };
 
-exports.indexId = function(req, res) {
-  Group.find({"users._id" :req.params._id},function (err, Groups) {
+exports.findByPseudo = function(req, res) {
+  Group.find({"users.pseudo" :req.params.pseudo},function (err, Groups) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(Groups);
+  });
+};
+
+exports.findByName = function(req, res) {
+  Group.find({"name" :req.params.name},function (err, Groups) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(Groups);
   });

@@ -12,7 +12,7 @@
     <!-- THEME STYLESHEETS -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css"/>
-    <link rel="stylesheet/less" href="app/css/app.less"/>
+    <link rel="stylesheet" href="app/css/app.css"/>
 
 </head>
 
@@ -24,12 +24,12 @@
   
   <center>
     <div id="login_section">
-      <div id="mail_section" class="white-box margin-top-30px">
-        <input type="text" id="email_field_login" ng-model="email_field_login" placeholder="Adresse mail" class="form-control margin-top-30px"/>
-        <input type="password" id="password_field_login" ng-model="password_field_login" placeholder="Mot de passe" class="form-control margin-top-30px"/>
+      <div id="mail_section" class="white-box width-25pc margin-top-30px padding-10px">
+        <input type="text" id="email_field_login" ng-model="email_field_login" placeholder="Adresse mail" class="form-control margin-top-10px"/>
+        <input type="password" id="password_field_login" ng-model="password_field_login" placeholder="Mot de passe" class="form-control margin-top-10px"/>
         <h3 ng-view="error_mail_login" class="red display-none"><i class="fa fa-warning"></i> Adresse mail inconnu.</h3>
         <h3 ng-view="invalid_mail_login" class="red display-none"><i class="fa fa-warning"></i> Adresse mail invalide.</h3>
-        <h3 ng-view="error_password_login" class="red display-none"><i class="fa fa-warning"></i> Mauvais mot de passe.</h3><br/>
+        <h3 ng-view="error_password_login" class="red display-none"><i class="fa fa-warning"></i> Mauvais mot de passe.</h3>
         <button id="next_button" class="btn btn-info margin-top-10px" ng-click="checkLogin()">Connection</button>
       </div>
 
@@ -37,7 +37,7 @@
     </div>
 
     <div id="account_section" class="display-none">
-      <div class="white-box margin-top-30px">
+      <div class="white-box width-25pc margin-top-30px padding-10px">
         <input type="text" id="pseudo_field_registration" ng-model="pseudo_field_registration" placeholder="Pseudo" class="form-control margin-top-10px"/>
         <h3 ng-view="error_pseudo_registration" class="red display-none"><i class="fa fa-warning"></i> Pseudo déja utilisé.</h3>
         <input type="mail" id="email_field_registration" ng-model="email_field_registration" placeholder="Address Mail" class="form-control margin-top-10px"/>
@@ -54,9 +54,6 @@
   </center>
 
 </body>
-
-<!-- LESS SCRIPT -->
-<script type="text/javascript" src="bower_components/less/dist/less.min.js"></script>
 
 <!-- JQUERY -->
 <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>

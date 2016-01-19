@@ -1,0 +1,24 @@
+<label class="margin-left-10px title"><i class="fa fa-user"></i> Membres du projet "{{groups[indexCurrentGroup]['name']}}"</label>
+
+<div class="separator"></div>
+
+<div class="inline-block width-200px margin-top-10px margin-left-10px padding-10px white-box" ng-repeat="user in groups[indexCurrentGroup]['users']">
+    <label> 
+        <i class="fa fa-user avatar-user inline-block"></i>
+    </label>
+    
+    <div class="inline-block">
+        <label>{{user['pseudo']}}</label> <i ng-show="user['role'] != ''">({{user['role']}})</i><br/>
+        <label>{{user['email']}}</label>
+    </div>
+</div>
+
+<div class="row container margin-top-30px">
+    <center>
+        <div class="white-box width-25pc padding-10px">
+            <label>Ajouter un nouvel utilisateur</label>
+            <input type="text" ng-model="$parent.pseudoNewUser" class="form-control margin-top-10px" placeholder="Pseudo"/>
+            <button class="btn btn-info margin-top-10px" ng-click="addUserIntoGroup()">Ajouter</button>
+        </div>
+    </center>
+</div>

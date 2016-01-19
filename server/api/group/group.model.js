@@ -5,9 +5,12 @@ var mongoose = require('mongoose'),
 
 var GroupSchema = new Schema({
 	name: String,
+	password: String,
 	users: {
 		type: [{
-				_id: {type: String} 
+				pseudo : String,
+				email : String,
+				role : String
 				}]
 			}
 });

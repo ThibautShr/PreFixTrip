@@ -56,14 +56,22 @@ body{
 	background-attachment: fixed;
 }
 
+.content{
+	position:absolute;
+  	top:0;
+  	left:0;
+	heigth:100%;
+	width:100%;
+}
+
 .panel-left{
 	height:100%;
 	background: url("../../assets/images/background/random_grey.png");
+	//background:ccc;
 	position:fixed;
 	//background:rgba(0,0,0,0.2);	
 	//border-right:1px #CCC solid;
-	padding-right:5px;
-	padding-left:5px;
+	padding:5px;
 }
 
 @media screen and (max-width: 992px) {
@@ -73,8 +81,39 @@ body{
 }
 
 .panel-right{
+	position:relative;
+	padding:10px;
 	height:100%;
+	//margin-left:250px;
 	//background:rgb(0,0,255);	
+}
+
+.white-box{
+	position:relative;
+	background:#fff;
+	box-shadow:1px 1px 3px rgba(0,0,0,0.5);
+	border:1px #ddd solid;
+	width:auto;
+}
+
+.menu-container li{
+	font-family: 'Raleway-Thin';
+	font-size:18px;
+	color:#555;
+	cursor:pointer;
+	padding:10px;
+	text-decoration:none;
+	display:inline-block;
+	font-weight:bold;
+}
+
+.menu-container li:hover,.active{
+	background : #efefef; 
+	color : #111;
+}
+
+.group-active{
+	background : red;	
 }
 
 .title-box{
@@ -86,6 +125,10 @@ body{
 	//border-bottom:1px rgba(200,200,200,0.3) solid;
 }
 
+.separator{
+	border-bottom:2px #111 dotted;	
+}
+
 .black-box{
 	background:rgba(0,0,0,0.6);
 	color:white;
@@ -93,6 +136,9 @@ body{
 	padding-bottom:5px;
 }
 
+.black-box:hover{
+	background:rgba(20,20,20,0.6);
+}
 
 .display-none{
 	display:none;
@@ -129,6 +175,12 @@ h5{
 	font-family: 'Raleway';
 	color: white;
 	font-size: 24px;	
+}
+
+.title{
+	font-family: 'Raleway';
+	color: #111;
+	font-size: 30px;	
 }
 
 .align-center{
@@ -183,6 +235,10 @@ h5{
 	margin-left:5px;
 }
 
+.margin-left-10px{
+	margin-left:10px;
+}
+
 .margin-left-15px{
 	margin-left:15px;
 }
@@ -198,7 +254,11 @@ h5{
 
 /*===================== PADDING =========================*/
 
-.padding-left-10{
+.padding-10px{
+	padding: 10px;
+}
+
+.padding-left-10px{
 	padding-left: 10px;
 }
 
@@ -208,8 +268,12 @@ h5{
 	width: 100px;
 }
 
-.width-210px{
-	width: 210px;
+.width-200px{
+	width: 200px;
+}
+
+.width-25pc{
+	width: 25%;
 }
 
 .width-100pc{
@@ -221,12 +285,12 @@ h5{
 }
 
 .height-100pc{
-	height:100%;	
+	min-height:100%;	
 }
 
 /*===================== OTHER ==========================*/
 
-.inline-box{
+.inline-block{
 	display: inline-block;
 	vertical-align: top;
 }
@@ -235,8 +299,13 @@ h5{
 	cursor: pointer;
 }
 
-.circle{
-	border-radius: 50%;
+.avatar-user{
+	background:#EEE;
+	padding:10px;
+	color:#333;
+	font-size:30px;
+	border-radius:50%;	
+	border:1px #CCC solid;
 }
 
 /* ============================ POPUP ============================ */
@@ -253,17 +322,6 @@ h5{
 	color: #333;
 	font-family: "Raleway-MediumItalic";
 }
-
-/* ============================ BOXES ============================ */
-
-.white-box{
-	background: white;
-	padding: 20px;
-	border: 1px #aaa solid;
-	box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-	width: 25%;
-}
-
 
 /* ===================== BACKGROUND ==================== */
 
