@@ -26,14 +26,20 @@ var app = angular.module('PreFixTripApp', [ 'ngLoadScript']);
 /* ========================= MAIN CONTROLLER ========================= */
 /* =================================================================== */
 
-app.controller('MainCtrl',function($rootScope, $http){
+app.controller('MainCtrl',function($scope, $http){
 	
-	$rootScope.check_login = function(){		
+	$scope.sessionInactive = function(){
+		alert('Votre session à expiré, veulliez vous reconnecter !');
+		document.location.href = "index.html";
+	}
+	
+	$scope.checkLogin = function(){		
 		var reg_mail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-		if(reg_mail.test($rootScope.mail_field_login)){			
+		if(reg_mail.test($scope.email_field_login)){	
 			$http.post('auth/local', {
-				email: $rootScope.mail_field_login,
-				password: $rootScope.password_field_login
+				pseudo: $scope.pseudo_field_login,
+				email: $scope.email_field_login,
+				password: $scope.password_field_login
 			}).
 			success(function(data) {
 				if(data['token'] != undefined){
@@ -46,7 +52,7 @@ app.controller('MainCtrl',function($rootScope, $http){
 					}).
 					error(function(resultat, statut, erreur){
 						if(statut == "401")
-							$scope.session_inactive();
+							$scope.sessionInactive();
 						alert(JSON.stringify(resultat,null,4));
 					}.bind(this));
 				}
@@ -58,51 +64,78 @@ app.controller('MainCtrl',function($rootScope, $http){
 			}.bind(this));
 		}
 	}
+	
+	$scope.hideRegistrationFormError = function(){
+		$scope.error_pseudo_registration = false;
+		$scope.error_confirmation_registration = false;
+		$scope.error_incomplete_form = false;	
+	}
 
-	$rootScope.makeAccount = function(){
-		if($rootScope.mail_field_registration != undefined &&
-		   $rootScope.password_field_registration != undefined &&
-		   $rootScope.confirm_password_field_registration != undefined ){
-			if($rootScope.password_field_registration == $rootScope.confirm_password_field_registration){ 
-				new_user = {'email': $rootScope.mail_field_registration,
-							'password' : $rootScope.password_field_registration};
+	$scope.makeAccount = function(){
+		
+		$scope.hideRegistrationFormError(); // Hide form error
+		
+		if($scope.pseudo_field_registration != undefined &&
+		   $scope.email_field_registration != undefined &&
+		   $scope.password_field_registration != undefined &&
+		   $scope.confirm_password_field_registration != undefined ){ // If the form is completed
+			   
+			$http.get('api/users/pseudo/' + $scope.pseudo_field_registration).
+			success(function(data) {
+				alert(JSON.stringify(data,null,4));
+				if(data.length == 0){ // pseudo undefined
 				
-				//make account
-				$http.post('api/users/', new_user).
-				success(function(data) {
-					//sign in
-					$rootScope.mail_field_login = $rootScope.mail_field_registration;
-					$rootScope.password_field_login = $rootScope.password_field_registration;
-					$rootScope.check_login();
-				}).
-				error(function(resultat, statut, erreur){
-					if(statut == "401")
-						$scope.session_inactive();
-					alert(JSON.stringify(resultat,null,4));
-					alert(statut);
-					alert(erreur);
-				}.bind(this));
-			}
-			else
-				alert('Erreur - Confirmation du mot de passe !');
+					if($scope.password_field_registration == $scope.confirm_password_field_registration){ // Password is equlal with the cofirmation
+						new_user = {'pseudo': $scope.pseudo_field_registration,
+									'email': $scope.email_field_registration,
+									'password' : $scope.password_field_registration};
+						
+						alert(JSON.stringify(new_user));
+						
+						//make account
+						$http.post('api/users/', new_user).
+						success(function(data) {
+							//log in
+							alert('success');
+							alert(JSON.stringify(data));
+							$scope.email_field_login = $scope.email_field_registration;
+							$scope.password_field_login = $scope.password_field_registration;
+							$scope.checkLogin();
+						}).
+						error(function(resultat, statut, erreur){
+							if(statut == "401")
+								$scope.sessionInactive();
+							alert(JSON.stringify(resultat,null,4));
+							alert(statut);
+							alert(erreur);
+						}.bind(this));
+					}
+					else
+						$scope.error_confirmation_registration = true; // show confirmation password error
+				}
+				else // pseudo already used
+					$scope.error_pseudo_registration = true; // show pseudo already used error
+			}).
+			error(function(resultat, statut, erreur){
+				alert(JSON.stringify(resultat,null,4));
+			}.bind(this));
 		}
 		else
-			alert('Erreur - Formulaire incomplet');
+			$scope.error_incomplete_form = true; // show incomplete password error
 	}
 	
-	$rootScope.initLoginRegistrattionForm = function(){
-		$rootScope.mail_field_login = '';
-		$rootScope.password_field_login = '';
+	$scope.initLoginRegistrattionForm = function(){
+		$scope.mail_field_login = '';
+		$scope.password_field_login = '';
 		
-		$rootScope.first_name_registration = '';
-		$rootScope.last_name_registration = '';
-		$rootScope.mail_field_registration = '';
-		$rootScope.password_field_registration = '';
-		$rootScope.confirm_password_field_registration = '';
+		$scope.pseudo_field_registration = 'titi';
+		$scope.email_field_registration = 'titi@titi.com';
+		$scope.password_field_registration = 'titi';
+		$scope.confirm_password_field_registration = 'titi';
 	}
 
 	//init forms
-	$rootScope.initLoginRegistrattionForm();
+	$scope.initLoginRegistrattionForm();
 
 });
 
@@ -112,7 +145,7 @@ app.controller('MainCtrl',function($rootScope, $http){
 
 app.controller('HomeCtrl', function($scope, $http){	
 
-	$scope.session_inactive = function(){
+	$scope.sessionInactive = function(){
 		alert('Votre session à expiré ! Vous devez vous connecter de nouveau !');
 		document.location.href= "index.html";
 	}
@@ -132,7 +165,7 @@ app.controller('HomeCtrl', function($scope, $http){
 			}).
 			error(function(resultat, statut, erreur){
 				if(statut == "401")
-					$scope.session_inactive();
+					$scope.sessionInactive();
 				alert(JSON.stringify(resultat,null,4));
 			}.bind(this));	
 	}
@@ -162,7 +195,7 @@ app.controller('HomeCtrl', function($scope, $http){
 				}).
 				error(function(resultat, statut, erreur){
 					if(statut == "401")
-						$scope.session_inactive();
+						$scope.sessionInactive();
 					alert(statut);
 					alert(JSON.stringify(resultat,null,4));
 				}.bind(this));

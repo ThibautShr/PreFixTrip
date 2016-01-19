@@ -6,17 +6,17 @@ var crypto = require('crypto');
 var authTypes = ['github', 'twitter', 'facebook', 'google'];
 
 var UserSchema = new Schema({
-	name: String,
-	email: { type: String, lowercase: true },
-	role: {
-			type: String,
-			default: 'user'
-		},
-	hashedPassword: String,
-	provider: String,
-	salt: String,
-	google: {},
-	github: {}
+  pseudo: String,
+  email: { type: String, lowercase: true },
+  role: {
+    type: String,
+    default: 'user'
+  },
+  hashedPassword: String,
+  provider: String,
+  salt: String,
+  google: {},
+  github: {}
 });
 
 /**
@@ -38,7 +38,7 @@ UserSchema
   .virtual('profile')
   .get(function() {
     return {
-      'name': this.name,
+      'pseudo': this.pseudo,
       'role': this.role
     };
   });

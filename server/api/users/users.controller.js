@@ -60,6 +60,19 @@ exports.show = function (req, res, next) {
 	});
 };
 
+exports.showByPseudo= function (req, res, next) {
+	var query = {};
+	if(req.params.pseudo){
+		query = {"pseudo" : req.params.pseudo};
+		User.find(query, function (err, user) {
+			if(err) return res.status(500).send(err);
+			res.status(200).json(user);
+		});
+	} else {
+		res.status(403).send("Forbidden");
+	}
+};
+
 /**
  * Deletes a user
  * restriction: "admin"
