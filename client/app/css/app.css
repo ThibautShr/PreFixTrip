@@ -56,6 +56,12 @@ body{
 	background-attachment: fixed;
 }
 
+.center-content{
+	position:relative;
+	left:25%;
+	width:50%;
+}
+
 .content{
 	position:absolute;
   	top:0;
@@ -86,14 +92,6 @@ body{
 	height:100%;
 	//margin-left:250px;
 	//background:rgb(0,0,255);	
-}
-
-.white-box{
-	position:relative;
-	background:#fff;
-	box-shadow:1px 1px 3px rgba(0,0,0,0.5);
-	border:1px #ddd solid;
-	width:auto;
 }
 
 .menu-container li{
@@ -142,6 +140,38 @@ body{
 
 .display-none{
 	display:none;
+}
+
+/*===================== BOXES =============================*/
+
+.white-box{
+	position:relative;
+	background:#fff;
+	box-shadow:1px 1px 3px rgba(0,0,0,0.5);
+	border:1px #ddd solid;
+	width:auto;
+}
+
+.blue-box,.green-box, .red-box{
+	position:relative;
+	border-radius:3px;
+	width:auto;
+	color:white;
+	padding:2px 5px 2px 5px;
+	margin-right:10px;
+	font-weight:normal	
+}
+
+.blue-box{
+	background:#3CF;
+}
+
+.green-box{
+	background:#093;
+}
+
+.red-box{
+	background:#F00;
 }
 
 /*===================== TEXT =============================*/

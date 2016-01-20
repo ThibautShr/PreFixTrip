@@ -196,27 +196,29 @@ app.controller('HomeCtrl', function($scope, $http){
 	
 	$scope.rejoinGroup = function(){
 		if($scope.newGroupName != undefined && $scope.newGroupPassword != undefined){
-			alert($scope.newGroupName);
 			//we are looking for the group with the good name
 			$http.get('api/group/search/' + $scope.newGroupName,
 				{headers: {'Authorization' : 'Bearer ' + $scope.token}}).
 				success(function(data) {
-					alert('pass : ' + $scope.newGroupPassword);
-					alert(JSON.stringify(data));
 					if(data.length > 0){ // if the group exist
-						if(data[0]['password'] == $scope.newGroupPassword){// if the password is true
-							data[0]['users'].push({ // We add the current user to the group 
-								'pseudo' : $scope.user['pseudo'],
-								'email' : $scope.user['email'],
-								'role' : ''
-							});
-							$scope.groups.push(data[0]);
-							alert(JSON.stringify(data[0]));
-							$scope.indexCurrentGroup = $scope.groups.length - 1;
-							$scope.updateGroup();
+					
+						if(!$scope.existUserIntoGroup(data[0]['users'], $scope.user['pseudo'])){ // If the user is not in the group
+						
+							if(data[0]['password'] == $scope.newGroupPassword){// if the password is true
+								data[0]['users'].push({ // We add the current user to the group 
+									'pseudo' : $scope.user['pseudo'],
+									'email' : $scope.user['email'],
+									'role' : ''
+								});
+								$scope.groups.push(data[0]);
+								$scope.indexCurrentGroup = $scope.groups.length - 1;
+								$scope.updateGroup();
+							}
+							else
+								alert('Erreur de mot de passe !');
 						}
 						else
-							alert('Erreur de mot de passe !');
+							alert('Vous êtes déjà dans ce groupe !');
 					}
 					else
 						alert('Groupe inconnu !');
@@ -234,36 +236,49 @@ app.controller('HomeCtrl', function($scope, $http){
 	
 	$scope.addGroup = function(){
 		if($scope.newGroupName != undefined && $scope.newGroupPassword != undefined){
-			var newGroup = {
-				'name' : $scope.newGroupName,
-				'password' : $scope.newGroupPassword,
-				'users' : [
-					{
-					'pseudo' : $scope.user['pseudo'],
-					'email' : $scope.user['email'],
-					'role' : 'Créateur'
-					}
-				]
-			};
-			
-			//alert(JSON.stringify(newGroup));
-			
-			$http.post('api/group/',
-				newGroup,{ 
-				headers: {'Authorization' : 'Bearer ' + $scope.token}}).
+						
+			$http.get('api/group/search/' + $scope.newGroupName, 
+				{ headers: {'Authorization' : 'Bearer ' + $scope.token}}).
 				success(function(data) {
-					//alert('success : ' + data);
-					//alert(JSON.stringify(data));
-					$scope.groups.push(data);
-					$scope.newGroupName = undefined;
-					$scope.newGroupPassword = undefined;
+					if(data.length == 0){ // if the name is not used
+						var newGroup = {
+							'name' : $scope.newGroupName,
+							'password' : $scope.newGroupPassword,
+							'users' : [
+								{
+								'pseudo' : $scope.user['pseudo'],
+								'email' : $scope.user['email'],
+								'role' : 'Créateur'
+								}
+							]
+						};
+						
+						$http.post('api/group/',
+							newGroup,{ 
+							headers: {'Authorization' : 'Bearer ' + $scope.token}}).
+							success(function(data) {
+								//alert('success : ' + data);
+								//alert(JSON.stringify(data));
+								$scope.groups.push(data);
+								$scope.newGroupName = undefined;
+								$scope.newGroupPassword = undefined;
+							}).
+							error(function(resultat, statut, erreur){
+								if(statut == "401")
+									$scope.sessionInactive();
+								alert(statut);
+								alert(JSON.stringify(resultat,null,4));
+							}.bind(this));
+					}
+					else
+						alert('Un grouoe portant ce nom exite déjà !');
 				}).
 				error(function(resultat, statut, erreur){
 					if(statut == "401")
 						$scope.sessionInactive();
 					alert(statut);
 					alert(JSON.stringify(resultat,null,4));
-				}.bind(this));
+				}.bind(this));				
 		}
 		else
 			alert('Formulaire incomplet !');
@@ -271,8 +286,7 @@ app.controller('HomeCtrl', function($scope, $http){
 	
 	/* =================== GROUP USER  ========================= */
 
-	$scope.existUserIntoGroup = function(pseudo){
-		var users = $scope.groups[$scope.indexCurrentGroup]['users'];
+	$scope.existUserIntoGroup = function(users, pseudo){
 		for(var i=0; i<users.length; ++i){
 			if(users[i]["pseudo"] == pseudo)
 				return true;	
@@ -293,7 +307,7 @@ app.controller('HomeCtrl', function($scope, $http){
 	
 	$scope.addUserIntoGroup = function(){
 		if($scope.pseudoNewUser != undefined && $scope.pseudoNewUser != ""){
-			if(!$scope.existUserIntoGroup($scope.pseudoNewUser)){
+			if(!$scope.existUserIntoGroup($scope.groups[$scope.indexCurrentGroup]['users'],$scope.pseudoNewUser)){
 				$http.get('api/users/search?pseudo=' + $scope.pseudoNewUser,{
 				headers: {'Authorization' : 'Bearer ' + $scope.token}}).
 				success(function(data) {
@@ -323,5 +337,98 @@ app.controller('HomeCtrl', function($scope, $http){
 		}
 		else
 			alert('Veuillez indiquer un nom !');
+	}
+	
+	/* =================== GROUP BILLS  ========================= */
+	
+	$scope.getTitleBill = function(id){
+		for(var i=0; i<$scope.bills.length; ++i){
+			if($scope.bills[i]['_id'] == id)
+				return 	$scope.bills[i]['title'];
+		}
+	}
+	
+	$scope.sum = function(array){
+		var sum = 0;
+		for(var i=0; i<array.length; ++i)
+			sum += array[i];
+		return sum;
+	}
+	
+	$scope.updateDebts = function(index){
+		$http.put('api/debs/' + $scope.debts[i]['_id'],
+		$scope.debts[i],
+		{ headers: {'Authorization' : 'Bearer ' + $scope.token}}).
+		error(function(resultat, statut, erreur){
+			if(statut == "401")
+				$scope.sessionInactive();
+			alert(JSON.stringify(resultat,null,4));
+		});
+	}
+
+	$scope.debts = [{
+		'lender' : 'titi',
+		'indebted' : 'toto',
+		'amount' : '100',
+		'transactions' : [10,80],
+		'list_bill_amount' : [
+				{'bill' : '0',
+				 'amount' : 10},
+			 	{'bill' : '1',
+				 'amount' : 90},
+			],
+		'_id' : 'vva5var056s'
+	}];
+
+	$scope.bills = [{
+		'title' : 'Titre',
+		'amount' : '1000',
+		'description' : 'Description du contexte !',
+		'lender' : ['toto','tete'],
+		'indebted' : [{
+			'user' : 'tutu',
+			'amount' : ''
+			},{
+			'user' : 'toto',
+			'amount' : ''
+			},{
+			'user' : 'tata',
+			'amount' : ''
+			}],
+		'group_owner_id' : '',
+		'mode' : 'mode',
+		'date' : '18/01/2016',
+		'_id' : '0'
+	},
+	{
+		'title' : 'Titre 2',
+		'amount' : '500',
+		'description' : 'Description du contexte !',
+		'lender' : ['toto','tata'],
+		'indebted' : [{
+			'user' : 'tutu',
+			'amount' : ''
+			},{
+			'user' : 'titi',
+			'amount' : ''
+			}],
+		'group_owner_id' : '',
+		'mode' : 'mode',
+		'date' : '20/01/2016',
+		'_id' : '1'
+	}];
+		
+});
+
+app.controller('DebtsController', function($scope, $http){
+	
+	$scope.addPayment = function(id){
+		for(var i=0; i<$scope.debts.length; ++i){
+			if($scope.debts[i]['_id'] == id){
+				$scope.debts[i]['transactions'].push(parseInt($scope.paymentAmount));
+				//$scope.updateDebts(i);
+				return i;
+			}
+		}
 	}
 });

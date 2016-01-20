@@ -10,7 +10,7 @@ function account(){
 function login(){
 	$('#account_section').addClass('display-none');
 	$('#login_section').removeClass('display-none');
-}
+} 
 
 /*function hideErrorMessage(){
 	$('#error_mail_login').hide();

@@ -1,0 +1,64 @@
+<label class="margin-left-10px title"><i class="fa fa-file"></i> Mes transactions </label>
+
+<div class="separator"></div>
+
+<div class="margin-top-30px">
+
+	<div ng-repeat="debt in debts">
+    	<div class="container row center-content">
+            <div class="margin-top-10px white-box padding-10px">
+            
+            	<p ng-class="debt['amount'] == sum(debt['transactions']) ? 'green-box' : 'red-box'" 
+                   class="pos-right">
+                   {{ debt['amount'] == sum(debt['transactions']) ? 'Réglé' : 'Non réglé' }}
+                </p>
+            
+                <p class="pos-right">{{bill['date']}}</p>
+                
+                <label class="blue-box">{{debt['indebted'] == user['pseudo'] ? 'Moi' : debt['indebted'] }}</label> 
+                
+                <b>({{debt['amount']}} €)</b> 
+                <i class="fa fa-arrow-right"></i> 
+                
+                <label class="blue-box">{{ debt['lender'] == user['pseudo'] ? 'Moi' : debt['lender'] }}</label><br/>
+                
+                <p>{{bill['description']}}</p>
+                
+                <div class="row">
+                    <p class="col-md-3">Factures </p>
+                    <label class="col-md-9 blue-box" ng-repeat="billInfo in debt['list_bill_amount']">{{getTitleBill(billInfo['bill'])}} ({{billInfo['amount']}} €)</label>
+                </div>
+                
+                <div class="row">
+                    <p class="col-md-3">Transations </p>
+                    <label class="col-md-9 blue-box" ng-repeat="transaction in debt['transactions']">{{transaction}} €</label>
+            	</div>
+                
+                <div class="row">
+                    <p class="col-md-3">Restant </p>
+                    <label class="col-md-9">{{debt['amount'] - sum(debt['transactions'])}} €</label>
+            	</div>
+                
+                <div ng-controller="DebtsController" ng-class="{ 'display-none' : debt['amount'] == sum(debt['transactions']) }" >
+                	<input type="text" ng-model="paymentAmount" class="inline-block width-200px form-control" placeholder="Montant du versement"/>
+                	<button class="inline-block btn btn-success" ng-click="addPayment(debt['_id'])">Signaler un versement</button>
+                </div>
+            </div>
+		</div>        
+	</div>
+</div>
+
+<!-- 
+	$scope.debts = [{
+		'lender' : 'titi',
+		'indebted' : 'toto',
+		'amount' : '100',
+		'transactions' : [10,20],
+		'list_bill_amount' : [
+				{'bill' : '0',
+				 'amount' : 75},
+			 	{'bill' : '1',
+				 'amount' : 25},
+			]
+	}];
+-->
