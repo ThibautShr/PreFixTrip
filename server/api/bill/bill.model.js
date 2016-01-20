@@ -7,8 +7,14 @@ var mongoose = require('mongoose'),
 var BillSchema = new Schema({
 	title: String,
 	amount: 0,
-	indebted: [],
-	lender: [],
+	indebted: { type : [{
+		user : String,
+		amount : 0
+		}]},
+	lender: { type : [{
+		user : String,
+		amount : 0
+		}]},
 	group_owner_id: String,
 	description: String,
 	mode: String,
