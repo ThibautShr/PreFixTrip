@@ -1,0 +1,32 @@
+<label class="margin-left-10px title"><i class="fa fa-euro"></i> Transactions de la facture "{{currentBill['title']}}"</label>
+
+<div class="separator"></div>
+
+<div class="margin-top-30px">
+
+	<center>
+    	<p ng-click="page='bills.html'" class="sky-blue pointer">Retour</p>
+    </center>
+    
+	<div ng-repeat="debt in groupDebts">
+    	<div class="container row center-content">
+            <div class="margin-top-10px white-box padding-10px">
+            
+            	<p ng-class="debt['amount'] == sum(debt['transactions']) ? 'green-box' : 'red-box'" 
+                   class="pos-right">
+                   {{ fetchAmount(debt['list_bill_amount']) == sum(debt['transactions']) ? 'Réglé' : 'Non réglé' }}
+                </p>
+            
+                <p class="pos-right">{{bill['date']}}</p>
+                
+                <label class="blue-box">{{debt['indebted'] == user['pseudo'] ? 'Moi' : debt['indebted'] }}</label> 
+                
+                <b>({{fetchAmount(debt['list_bill_amount'])}} €)</b> 
+                <i class="fa fa-arrow-right"></i> 
+                
+                <label class="blue-box">{{ debt['lender'] == user['pseudo'] ? 'Moi' : debt['lender'] }}</label><br/>
+                
+            </div>
+		</div>        
+	</div>
+</div>

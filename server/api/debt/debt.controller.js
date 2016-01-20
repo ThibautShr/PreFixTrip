@@ -17,6 +17,13 @@ exports.indexId = function(req, res) {
   });
 };
 
+exports.findByBillId = function(req, res) {
+  Debt.find({list_bill_amount: { $elemMatch: { bill : req.params.bill_id }}},function (err, Debts) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(Debts);
+  });
+};
+
 exports.show = function(req, res) {
   Debt.findById(req.params.id, function (err, Debt) {
     if(err) { return handleError(res, err); }

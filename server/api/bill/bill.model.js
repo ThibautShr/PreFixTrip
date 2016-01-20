@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var BillSchema = new Schema({
+	payed: String,
 	title: String,
 	amount: 0,
 	indebted: { type : [{

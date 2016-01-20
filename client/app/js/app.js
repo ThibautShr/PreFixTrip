@@ -369,52 +369,130 @@ app.controller('HomeCtrl', function($scope, $http){
 	$scope.debts = [{
 		'lender' : 'titi',
 		'indebted' : 'toto',
-		'amount' : '100',
-		'transactions' : [10,80],
+		'amount' : 75,
+		'transactions' : [],
 		'list_bill_amount' : [
 				{'bill' : '0',
-				 'amount' : 10},
-			 	{'bill' : '1',
-				 'amount' : 90},
-			],
-		'_id' : 'vva5var056s'
+				 'amount' : 75}
+			]
 	}];
 
+	$scope.initBillDebts = function(id){
+		for(var i=0; i<$scope.debts.length; ++i){			
+			$http.post('api/debs/',
+			$scope.debts[i],
+			{ headers: {'Authorization' : 'Bearer ' + $scope.token}}).
+			error(function(resultat, statut, erreur){
+				if(statut == "401")
+					$scope.sessionInactive();
+				alert(JSON.stringify(resultat,null,4));
+			});	
+		}
+		
+		for(var i=0; i<$scope.bills.length; ++i){			
+			$http.post('api/bill/',
+			$scope.bills[i],
+			{ headers: {'Authorization' : 'Bearer ' + $scope.token}}).
+			error(function(resultat, statut, erreur){
+				if(statut == "401")
+					$scope.sessionInactive();
+				alert(JSON.stringify(resultat,null,4));
+			});	
+		}
+	}
+	
+	$scope.groupDebts = [{
+		'lender' : 'titi',
+		'indebted' : 'toto',
+		'amount' : 75,
+		'transactions' : [],
+		'list_bill_amount' : [
+				{'bill' : '0',
+				 'amount' : 75}
+			]
+	},{
+		'lender' : 'tutu',
+		'indebted' : 'toto',
+		'amount' : 75,
+		'transactions' : [],
+		'list_bill_amount' : [
+				{'bill' : '0',
+				 'amount' : 75}
+			]
+	}];
+	
+	$scope.currentBill;
+	
+	$scope.fetchAmount = function(listAmount){
+		for(var i=0; i<listAmount.length; ++i){
+			if(listAmount[i]['bill'] == $scope.currentBill['_id'])
+				return listAmount[i]['amount'];	
+		}
+	}
+	
+	$scope.showDebts = function(bill){
+		/*$http.get('api/debs/search/' + bill['_id'],
+		{ headers: {'Authorization' : 'Bearer ' + $scope.token}}).
+		success(function(data){
+			$scope.groupDebts = data;
+			$scope.currentBill = bill;
+			page = "groupDebts.html";
+		}).
+		error(function(resultat, statut, erreur){
+			if(statut == "401")
+				$scope.sessionInactive();
+			alert(JSON.stringify(resultat,null,4));
+		});*/
+		
+		//$scope.groupDebts = data;
+		
+		$scope.currentBill = bill;
+		$scope.page = "groupDebts.html";
+	}
+	
+	$scope.billPayedState = "";
+
 	$scope.bills = [{
+		'payed' : '1',
 		'title' : 'Titre',
-		'amount' : '1000',
-		'description' : 'Description du contexte !',
-		'lender' : ['toto','tete'],
+		'amount' : 1000,
 		'indebted' : [{
+			'user' : 'titi',
+			'amount' : 75
+			},{
 			'user' : 'tutu',
-			'amount' : ''
+			'amount' : 75
+			}],
+		'lender' : [{
+			'user' : 'toto',
+			'amount' : 150
+			}],
+		'group_owner_id' : '',
+		'description' : 'Description du contexte !',
+		'mode' : '',
+		'date' : '18/01/2016',
+		'linkedFiles' : [],
+		'_id' : '0'
+	},{
+		'payed' : '1',
+		'title' : 'Titre 2',
+		'amount' : 1000,
+		'indebted' : [{
+			'user' : 'tata',
+			'amount' : 100
 			},{
 			'user' : 'toto',
-			'amount' : ''
-			},{
-			'user' : 'tata',
-			'amount' : ''
+			'amount' : 100
 			}],
-		'group_owner_id' : '',
-		'mode' : 'mode',
-		'date' : '18/01/2016',
-		'_id' : '0'
-	},
-	{
-		'title' : 'Titre 2',
-		'amount' : '500',
-		'description' : 'Description du contexte !',
-		'lender' : ['toto','tata'],
-		'indebted' : [{
+		'lender' : [{
 			'user' : 'tutu',
-			'amount' : ''
-			},{
-			'user' : 'titi',
-			'amount' : ''
+			'amount' : 200
 			}],
 		'group_owner_id' : '',
-		'mode' : 'mode',
-		'date' : '20/01/2016',
+		'description' : 'Description du contexte !',
+		'mode' : '',
+		'date' : '18/01/2016',
+		'linkedFiles' : [],
 		'_id' : '1'
 	}];
 		

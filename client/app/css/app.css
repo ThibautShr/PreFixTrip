@@ -207,6 +207,11 @@ h5{
 	font-size: 24px;	
 }
 
+p{
+	font-family: 'Raleway';	
+	font-size:18px;
+}
+
 .title{
 	font-family: 'Raleway';
 	color: #111;
@@ -223,6 +228,10 @@ h5{
 
 .uppercase{
 	text-transform:uppercase;
+}
+
+.bold{
+	font-weight:bold;	
 }
 
 /*===================== FONT SIZE =====================*/

@@ -4,26 +4,34 @@
 
 <div class="margin-top-30px">
 
-	<div ng-repeat="bill in bills">
+	<center>
+    	<p ng-class="{ 'bold' : billPayedState == '1' }" class="inline-block green pointer" ng-click="billPayedState='1'" >Payé</p>
+        <p ng-class="{ 'bold' : billPayedState == '0' }" class="inline-block red pointer margin-left-10px" ng-click="billPayedState='0'">Non Payé</p>
+        <p ng-class="{ 'bold' : billPayedState == '' }" class="inline-block pointer sky-blue margin-left-10px" ng-click="billPayedState=''">Toute</p>
+    </center>
+
+	<div ng-repeat="bill in bills | filter : { payed : billPayedState }">
     	<div class="container row center-content">
             <div class="margin-top-10px white-box padding-10px">
                 <p class="pos-right">{{bill['date']}}</p>
                 <b>{{bill['title']}}</b>
                 <p>{{bill['description']}}</p>
                 <div class="row">
-                    <p class="col-md-2">Montant </p>
-                    <b class="col-md-10">{{bill['amount']}} €</b>
+                    <p class="col-md-3">Montant </p>
+                    <b class="col-md-9">{{bill['amount']}} €</b>
                 </div>
                 
                 <div class="row">
-                    <p class="col-md-2">Payeurs </p>
-                    <label class="col-md-10 blue-box" ng-repeat="user in bill['lender']">{{user}}</label>
+                    <p class="col-md-3">Payeurs </p>
+                    <label class="col-md-9 blue-box" ng-repeat="lender in bill['lender']">{{lender['user']}}</label>
                 </div>
                 
                 <div class="row">
-                    <p class="col-md-2">Endettés </p>
-                    <label class="col-md-10 blue-box" ng-repeat="indebted in bill['indebted']">{{indebted['user']}}</label>
+                    <p class="col-md-3">Endettés </p>
+                    <label class="col-md-9 blue-box" ng-repeat="indebted in bill['indebted']">{{indebted['user']}}</label>
             	</div>
+                
+                <button class="btn btn-info" ng-click="showDebts(bill)">Voir les dettes</button>
             </div>
 		</div>    
 	</div>

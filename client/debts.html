@@ -1,4 +1,4 @@
-<label class="margin-left-10px title"><i class="fa fa-file"></i> Mes transactions </label>
+<label class="margin-left-10px title"><i class="fa fa-euro"></i> Mes transactions </label>
 
 <div class="separator"></div>
 
@@ -30,8 +30,8 @@
                 </div>
                 
                 <div class="row">
-                    <p class="col-md-3">Transations </p>
-                    <label class="col-md-9 blue-box" ng-repeat="transaction in debt['transactions']">{{transaction}} €</label>
+                    <p class="col-md-3">Transactions </p>
+                    <label class="col-md-9 blue-box" ng-repeat="transaction in debt['transactions'] track by $index">{{transaction}} €</label>
             	</div>
                 
                 <div class="row">
