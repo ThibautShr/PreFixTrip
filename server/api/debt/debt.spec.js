@@ -11,7 +11,7 @@ var Debt = require('./debt.model');
 var Debt = new Debt({
 	
 	lender: "User1",
-	endebted: "User2",
+	indebted: "User2",
 	amount: 1,
 	transactions: [],
 	list_bill_amount : [{

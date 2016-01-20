@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 
 var DebtSchema = new Schema({
 	lender: String,
-	endebted: String,
+	indebted: String,
 	amount: 0,
 	transactions: [],
 	list_bill_amount : { type : [{
