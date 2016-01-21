@@ -1,6 +1,6 @@
 
-var billManager = angular.module('billManager',[]);
-billManager.controller('billControl', ['$scope', function($scope) {
+var billManager = angular.module('billManager',["$http"]);
+billManager.controller('billControl', ["$http",'$scope', function($http,$scope) {
 $scope.bill = new Object()
 var nbInBill=0
 var group = ["pierre","paul","jacques"]
@@ -252,7 +252,8 @@ var upDebt = function(bill){
 
 $scope.finish=function(bill){
 	$scope.update(bill)
-	upDebt(bill)
+	$http.post("api/bill/" , bill);
+	upDebt(bill)	
 }
 
 }]);
