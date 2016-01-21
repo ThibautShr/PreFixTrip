@@ -17,10 +17,6 @@
 </head>
 
 <body class="home-background" ng-app="PreFixTripApp" ng-controller="HomeCtrl">
-	<!-- <header class="row">
-        <label class="col-md-4">PreFixTrip</label>
-        <label class="pos-right">{{user.email}}</label>
-    </header>-->
     
     <div class="content row container">
         
@@ -50,7 +46,7 @@
          </div>
          <!-- END LEFT PANEL -->
         
-        <div class="col-md-offset-2 col-md-10 panel-right">
+        <div ng-show="groups.length > 0" class="col-md-offset-2 col-md-10 panel-right">
             <center>
                 <ul class="menu-container white-box">
                     <li ng-class="{ 'active' : page == 'account.html' }" ng-click="page='account.html'">Mon compte</li>
@@ -58,7 +54,7 @@
                     <li ng-class="{ 'active' : page == 'debts.html' }" ng-click="page='debts.html'">Transactions</li>
                     <li ng-class="{ 'active' : page == 'users.html' }" ng-click="page='users.html'">Membres</li>
                     <li ng-class="{ 'active' : page == 'bills.html' }" ng-click="page='bills.html'">Factures</li>
-                    <li ng-class="{ 'active' : page == 'bills.html' }" ng-click="page='BillForm.html'">Test</li>
+                    <li ng-class="{ 'active' : page == 'AddBillForm.html' }" ng-click="page='AddBillForm.html'">Test</li>
                 </ul>
             </center>
             

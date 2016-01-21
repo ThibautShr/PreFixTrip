@@ -1,14 +1,15 @@
 <label class="margin-left-10px title"><i class="fa fa-file"></i> Factures du groupe "{{groups[indexCurrentGroup]['name']}}"</label>
-<button ng-click="alert('ok');page='BillForm.html';alert(page)" class="btn btn-info">Créer une facture</button>
 
 <div class="separator"></div>
 
 <div class="margin-top-30px">
 
 	<center>
-    	<p ng-class="{ 'bold' : billPayedState == '1' }" class="inline-block green pointer" ng-click="billPayedState='1'" >Payé</p>
-        <p ng-class="{ 'bold' : billPayedState == '0' }" class="inline-block red pointer margin-left-10px" ng-click="billPayedState='0'">Non Payé</p>
-        <p ng-class="{ 'bold' : billPayedState == '' }" class="inline-block pointer sky-blue margin-left-10px" ng-click="billPayedState=''">Toute</p>
+        <button ng-click="page='BillForm.html'" class="btn btn-info">Créer une facture</button><br/>
+
+    	<p ng-class="{ 'bold' : billPayedState == '1' }" class="margin-top-10px inline-block pointer" ng-click="billPayedState='1'" >Payé</p>
+        <p ng-class="{ 'bold' : billPayedState == '0' }" class="margin-top-10px inline-block pointer margin-left-10px" ng-click="billPayedState='0'">Non Payé</p>
+        <p ng-class="{ 'bold' : billPayedState == '' }" class="margin-top-10px inline-block pointer margin-left-10px" ng-click="billPayedState=''">Toute</p>
     </center>
 
 	<div ng-repeat="bill in bills | filter : { payed : billPayedState }">

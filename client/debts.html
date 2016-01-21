@@ -4,7 +4,7 @@
 
 <div class="margin-top-30px">
 
-	<div ng-repeat="debt in debts">
+	<div ng-repeat="debt in debts" ng-controller="DebtsController">
     	<div class="container row center-content">
             <div class="margin-top-10px white-box padding-10px">
             
@@ -41,7 +41,7 @@
                     <label class="col-md-9">{{debt['amount'] - sum(debt['transactions'])}} €</label>
             	</div>
                 
-                <div ng-controller="DebtsController" ng-show="debt['amount'] > sum(debt['transactions']) && debt['lender'] == user['pseudo']" >
+                <div ng-show="debt['amount'] > sum(debt['transactions']) && debt['lender'] == user['pseudo']" >
                     
                     <select ng-model="billSelected" ng-options="getTitleBill(billAmount['bill']) for billAmount in debt.list_bill_amount" class="width-200px form-control">
                     </select>
@@ -52,7 +52,9 @@
                 
                 <div ng-show="debt['amount'] > sum(debt['transactions']) && debt['indebted'] == user['pseudo']" >
                 	<select ng-model="billSelected" ng-options="getTitleBill(billAmount['bill']) for billAmount in debt.list_bill_amount" class="width-200px form-control">
-                	<input type="number" ng-model="paymentAmount" class="margin-top-10px inline-block width-200px form-control" placeholder="Montant du versement"/>
+                    </select>
+                	
+                    <input type="number" ng-model="paymentAmount" class="margin-top-10px inline-block width-200px form-control" placeholder="Montant du versement"/>
   					<button class="margin-top-10px inline-block btn btn-warning" ng-click="addPayment(debt)">Faire une transaction</button>
                 </div>
                 

@@ -1,0 +1,67 @@
+<label class="margin-left-10px title"><i class="fa fa-file"></i> Nouvelle Facture</label>
+
+<div class="separator"></div>
+
+  <div class="margin-top-30px">
+
+    <div ng-controller="billControl">
+      <div class="container row big-center-content">
+        <div class="margin-top-10px white-box padding-10px">
+          <form novalidate>
+
+            <input class="form-control margin-top-10px" type="text" placeholder="Titre" ng-message="required" ng-model="bill.title"/>
+            
+            <input class="form-control margin-top-10px" type="date" placeholder="Date" ng-model="bill.date"/>
+            
+            <textarea class="form-control margin-top-10px" placeholder="Description" ng-model="bill.description"></textarea>
+            
+            <p class="margin-top-10px"> Mode </p>
+            <select class="form-control" ng-model="bill.mode" ng-change="updateMode()">
+              <option value="egal" selected="selected">équitable</option>
+              <option value="fix">fixé</option>
+            </select>
+
+            <select class="form-control margin-top-10px" ng-message="required" placeholder="Nouveau Préteur" ng-model="lendertmp">
+              <option ng-repeat="someone in groups[indexCurrentGroup].users">{{someone.pseudo}}</option>
+            </select>
+            
+            <input class="form-control margin-top-10px" placeholder="Montant avancé" type="number" ng-model="amountProvided"/>
+            <input class="btn btn-info margin-top-10px" type="button" ng-click="addLender(lendertmp,amountProvided)" value="Ajouter"/>
+            
+            <div ng-repeat="lender in bill.lenders">
+              <div class="margin-top-10px">
+                <button class="btn btn-danger" ng-click="deleteLender(lender)">Supprimer</button>
+                <label class="margin-left-10px">Nom : </label> 
+                <b class="pink margin-left-10px">{{lender.user}}</b> 
+                <label class="margin-left-10px">montant : </label>
+                <b class="pink margin-left-10px">{{lender.amount}} €</b> 
+                <label class="margin-left-10px">part : </label>
+                <b class="pink margin-left-10px">{{lender.part}} €</b> 
+                <label class="margin-left-10px">participate : </label>
+                <b class="pink margin-left-10px">{{lender.participate}} €</b> 
+                <input type="checkbox" class="margin-left-10px" ng-click="selfish(lender)"/>
+              </div>
+            </div>
+            
+            <p>Nouvel endetté :
+            <select class="form-control" ng-message="required" ng-model="lendertmp">
+              <option ng-repeat="someone in groups[indexCurrentGroup].users">{{someone.pseudo}}</option>
+            </select><br/>
+            
+            <p ng-show="secondfield"><input class="form-control" type="number" placeholder="Montant fixé" ng-model="fixedAmount"/></p>
+            <p><input class="btn btn-info margin-top-10px" type="button" ng-click="addIndebted(indebtedtmp,fixedAmount)" value="Ajouter" /></p>
+
+            <div ng-repeat="indebt in bill.indebted">
+              <p>{{indebt.user}} dois {{indebt.amount}}  <i class="fa fa-close red pointer" ng-click="deleteIndebted(indebt)"></i></p>
+            </div>
+
+            <button class="btn btn-info margin-top-10px" ng-click="finish(bill)">Valider</button><br/>
+            
+            <p class="margin-top-10px">Total : <b class="pink">{{bill.amount}} €</b></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
