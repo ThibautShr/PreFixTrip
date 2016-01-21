@@ -18,10 +18,11 @@ var indebted =[]
 	lender=new Object()
 	lender.user=lendername
 	lender.amount=amountLent
+	lender.participate=1
 	$scope.deleteLender(lender)
-	$scope.bill.lenders.push(lender)
     	$scope.bill.amount=$scope.bill.amount+amountLent
 	nbInBill=nbInBill+1
+	$scope.bill.lenders.push(lender)
 	$scope.update($scope.bill)
 }
 
@@ -46,6 +47,21 @@ var indebted =[]
 	
 	
 }
+
+    $scope.selfish=function(victim){
+	if(victim.participate==1){
+		victim.participate=0
+		victim.part=0
+		nbInBill=nbInBill-1
+		
+	}
+	else{
+		victim.participate=1
+		nbInBill=nbInBill+1
+	}
+	$scope.update($scope.bill)
+	}
+
     $scope.deleteIndebted=function(victim){
 		var tmptab=[]
 		for(var i= 0; i < $scope.bill.indebted.length; i++)
@@ -116,7 +132,10 @@ var indebted =[]
  $scope.update=function(bill){
      
     if(bill.mode=="egal"){
-	var part=bill.amount/nbInBill
+	var part=bill.amount
+	if(nbInBill>0){
+	 part=bill.amount/nbInBill
+	}
      	var indebtedtmp = bill.indebted
 	bill.indebted=[]
 	for(var i= 0; i < indebtedtmp.length; i++)
@@ -130,18 +149,55 @@ var indebted =[]
 	for(var i= 0; i < bill.lenders.length; i++)
 	{
 	    tmp=bill.lenders[i]
-	    if(tmp.amount<part){
+	    if(tmp.participate==1){
+		tmp.part=part
+		if(tmp.amount<part){
 		indebt=new Object()
 		indebt.user=tmp.user
 		indebt.amount=part-tmp.amount
 		deleteIndebtedPrivate(indebt)
 		bill.indebted.push(indebt)
+		}
 	    }
-	    
+	    else{
+		indebt=new Object()
+		indebt.user=tmp.user
+		deleteIndebtedPrivate(indebt)
+		}
 	}
     }
 
 	if(bill.mode=="fix"){
+		var total=bill.amount
+		var subTotal=0
+		var participatingLenders=[]
+		for(var i= 0; i < bill.lenders.length; i++)
+		{
+			indebt=new Object()
+			indebt.user=bill.lenders[i].user
+			deleteIndebtedPrivate(indebt)
+			if(bill.lenders[i].participate==1){
+				participatingLenders.push(bill.lenders[i])
+			}
+			else{
+				bill.lenders[i].part=0
+				}
+		}
+		for(var i= 0; i < bill.indebted.length; i++)
+		{
+			subTotal=subTotal+bill.indebted[i].amount
+		}
+		var leftover=total-subTotal
+		console.log(leftover)
+		for(var i= 0; i < participatingLenders.length; i++){
+			participatingLenders[i].part=leftover/participatingLenders.length
+			if(participatingLenders[i].amount<participatingLenders[i].part){
+					indebt.amount=participatingLenders[i].part-participatingLenders[i].amount
+					bill.indebted.push(indebt)
+				}
+		}
+		
+			
     }
 }
 
