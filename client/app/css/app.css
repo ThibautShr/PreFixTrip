@@ -207,7 +207,7 @@ h5{
 	font-size: 24px;	
 }
 
-p{
+p, b, label{
 	font-family: 'Raleway';	
 	font-size:18px;
 }
@@ -413,6 +413,10 @@ p{
 
 .sky-blue{
 	color : #2cacd3;
+}
+
+.pink{
+	color:#F69;
 }
 
 .color-aaa{

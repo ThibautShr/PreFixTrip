@@ -500,13 +500,56 @@ app.controller('HomeCtrl', function($scope, $http){
 
 app.controller('DebtsController', function($scope, $http){
 	
-	$scope.addPayment = function(id){
-		for(var i=0; i<$scope.debts.length; ++i){
-			if($scope.debts[i]['_id'] == id){
-				$scope.debts[i]['transactions'].push(parseInt($scope.paymentAmount));
-				//$scope.updateDebts(i);
-				return i;
+	$scope.addPayment = function(debt){
+		if(parseInt($scope.paymentAmount) > (debt['amount'] - $scope.sum(debt['transactions'])))
+			alert('le montant est trop grand !');
+		else{
+			for(var i=0; i<$scope.debts.length; ++i){
+				if($scope.debts[i]['_id'] == debt['_id']){
+					$scope.debts[i]['transactions'].push(parseInt($scope.paymentAmount));
+					//$scope.updateDebts(i);
+					return i;
+				}
 			}
 		}
 	}
+});
+
+app.controller('DashboardController', function($scope, $http){
+	
+	$scope.nbTransactionCreditedPayed = 0; 
+	
+	$scope.nbTransactionCreditingPayed = 0;
+	
+	$scope.nbTransactionCreditedNotPayed = 0;
+	
+	$scope.nbTransactionCreditingNotPayed = 0;
+	
+	$scope.amountPayed = 0;
+	$scope.amountRefund = 0;
+	$scope.amountToPayed = 0;
+	
+	$scope.loadDashboard = function(){
+		for(var i=0; i<$scope.debts.length; ++i){
+			var sumTransactions = $scope.sum($scope.debts[i]['transactions']);
+			if($scope.debts[i]['lender'] == $scope.user['pseudo']){ // transaction crediting
+				$scope.amountPayed += $scope.debts[i]['amount'];
+				$scope.amountRefund += sumTransactions;
+				if(sumTransactions == $scope.debts[i]['amount']) // payed
+					$scope.nbTransactionCreditingPayed++;
+				else // not payed
+					$scope.nbTransactionCreditingNotPayed++;
+			}
+			else{ // transaction credited
+				$scope.amountToPayed += $scope.debts[i]['amount'] - sumTransactions;
+				if(sumTransactions == $scope.debts[i]['amount']) // payed
+					$scope.nbTransactionCreditedPayed++;
+				else // not payed
+					$scope.nbTransactionCreditingNotPayed++;
+			}
+		}
+	}
+	
+	$scope.loadDashboard();
+
 });

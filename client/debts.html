@@ -41,7 +41,7 @@
                 
                 <div ng-controller="DebtsController" ng-class="{ 'display-none' : debt['amount'] == sum(debt['transactions']) }" >
                 	<input type="text" ng-model="paymentAmount" class="inline-block width-200px form-control" placeholder="Montant du versement"/>
-                	<button class="inline-block btn btn-success" ng-click="addPayment(debt['_id'])">Signaler un versement</button>
+                	<button class="inline-block btn btn-success" ng-click="addPayment(debt)">Signaler un versement</button>
                 </div>
             </div>
 		</div>        
