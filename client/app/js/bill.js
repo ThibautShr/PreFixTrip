@@ -38,6 +38,7 @@ var indebted =[]
 	if($scope.bill.mode=="egal"){
 		indebt=new Object()
 		indebt.user=indebtedname
+		$scope.deleteIndebted(indebt)
 		$scope.bill.indebted.push(indebt)
 		nbInBill=nbInBill+1
 		$scope.update($scope.bill)
@@ -60,6 +61,21 @@ var indebted =[]
 		}
 		$scope.bill.indebted=tmptab
 	}
+
+	var deleteIndebtedPrivate=function(victim){
+		var tmptab=[]
+		for(var i= 0; i < $scope.bill.indebted.length; i++)
+		{
+		var tmp=$scope.bill.indebted[i]
+		if(tmp.user!=victim.user){
+			tmptab.push(tmp)
+		}
+		else{
+			console.log($scope.bill.amount)		
+		}
+		}
+		$scope.bill.indebted=tmptab
+	}
 	$scope.deleteLender=function(victim){
 		var tmptab=[]
 		for(var i= 0; i < $scope.bill.lenders.length; i++)
@@ -74,7 +90,24 @@ var indebted =[]
 		}
 		}
 		$scope.bill.lenders=tmptab
-	}     
+	}  
+	var deleteLenderPrivate=function(victim){
+		var tmptab=[]
+		for(var i= 0; i < $scope.bill.lenders.length; i++)
+		{
+		var tmp=$scope.bill.lenders[i]
+		if(tmp.user!=victim.user){
+			tmptab.push(tmp)
+		}
+		else{
+			$scope.bill.amount=$scope.bill.amount-tmp.amount		
+		}
+		}
+		$scope.bill.lenders=tmptab
+	}  
+
+
+	   
 
     $scope.updateMode=function(){
 	$scope.secondfield=$scope.bill.mode=="fix"
@@ -101,17 +134,7 @@ var indebted =[]
 		indebt=new Object()
 		indebt.user=tmp.user
 		indebt.amount=part-tmp.amount
-		var tmptab=[]
-		victim=indebt
-		for(var i= 0; i < $scope.bill.indebted.length; i++)
-		{
-		var tmp=$scope.bill.indebted[i]
-		if(tmp.user!=victim.user){
-			tmptab.push(tmp)
-		}
-		}
-		$scope.bill.indebted=tmptab
-		
+		deleteIndebtedPrivate(indebt)
 		bill.indebted.push(indebt)
 	    }
 	    
