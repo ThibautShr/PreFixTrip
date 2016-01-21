@@ -1,9 +1,9 @@
 
-var billManager = angular.module('billManager',["$http"]);
-billManager.controller('billControl', ["$http",'$scope', function($http,$scope) {
+var billManager = angular.module('billManager',[]);
+billManager.controller('billControl', ['$scope', function($scope) {
 $scope.bill = new Object()
 var nbInBill=0
-var group = ["pierre","paul","jacques"]
+//$http.get("api/group/"+$scope.groups[$scope.indexCurrentGroup]._id,fuction(data){$scope.group=data});
 var indebted =[]
     
     var amountLent
