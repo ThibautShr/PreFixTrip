@@ -31,6 +31,8 @@
                 <h1>PreFixTrip</h1>
         	
                 <h4>{{ user['pseudo'] }}</h4>
+                
+                <p class="sky-blue pointer" ng-click="logOut()">Déconnection</p>
         	
         		<div class="margin-top-20px title-box">Groupes</div>         
                              
@@ -51,10 +53,12 @@
         <div class="col-md-offset-2 col-md-10 panel-right">
             <center>
                 <ul class="menu-container white-box">
+                    <li ng-class="{ 'active' : page == 'account.html' }" ng-click="page='account.html'">Mon compte</li>
                     <li ng-class="{ 'active' : page == 'dashboard.html' }" ng-click="page='dashboard.html'">Tableau de bord</li>
                     <li ng-class="{ 'active' : page == 'debts.html' }" ng-click="page='debts.html'">Transactions</li>
                     <li ng-class="{ 'active' : page == 'users.html' }" ng-click="page='users.html'">Membres</li>
                     <li ng-class="{ 'active' : page == 'bills.html' }" ng-click="page='bills.html'">Factures</li>
+                    <li ng-class="{ 'active' : page == 'bills.html' }" ng-click="page='BillForm.html'">Test</li>
                 </ul>
             </center>
             
@@ -77,5 +81,17 @@
 
 <!-- APP -->
 <script type="text/javascript" src="app/js/app.js"></script>
+
+<!-- cdn for modernizr -->
+<script src="http://cdn.jsdelivr.net/webshim/1.12.4/extras/modernizr-custom.js"></script>
+<!-- polyfiller file to detect and load polyfills -->
+<script src="http://cdn.jsdelivr.net/webshim/1.12.4/polyfiller.js"></script>
+
+<script>
+	webshims.setOptions('waitReady', false);
+	webshims.setOptions('forms-ext', {types: 'date'});
+	webshims.polyfill('forms forms-ext');
+	webshims.activeLang('fr');
+</script>
 
 </html>
