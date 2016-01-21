@@ -21,14 +21,14 @@
       <option value="fix">fixé</option>
     </select></p>
 </p>
-	<p>Nouveau preteur:<input type="text" ng-message="required" ng-model="lendertmp"/><br/>
+	<p>Nouveau preteur:<select ng-message="required" ng-model="lendertmp"/><option ng-repeat="someone in group.users">{{someone.pseudo}}</option></select><br/>
 	<p>Montant avancé : <input type="number" ng-model="amountProvided"/><br/>
 	  <input type="button" ng-click="addLender(lendertmp,amountProvided)" value="Ajouter"/></p>
     <div ng-repeat="lender in bill.lenders">
       <p>Nom : {{lender.user}} montant : {{lender.amount}}  part: {{lender.part}} participate:{{lender.participate}} <input type="button" ng-click="deleteLender(lender)" value="X"/><input type="checkbox" ng-click="selfish(lender)"></p>
       
     </div>
-    <p>Nouvel endetté :<input type="text" ng-model="indebtedtmp"/><br/></p>
+    <p>Nouvel endetté :<select ng-message="required" ng-model="lendertmp"/><option ng-repeat="someone in group.users">{{someone.pseudo}}</option></select><br/>
     <p ng-show="secondfield">Montant fixé : <input type="number" ng-model="fixedAmount"/><br/></p>
     <p><input type="button" ng-click="addIndebted(indebtedtmp,fixedAmount)" value="Ajouter" /></p>
     
