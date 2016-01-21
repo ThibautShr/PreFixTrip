@@ -1,0 +1,46 @@
+<html lang="en">
+ <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+<head>
+	<meta charset="UTF-8">
+	<title>Creation de Facture</title>
+</head>
+<body>
+
+<header>
+	<H1>Facture</H1>
+</header>
+
+<div ng-app="billManager" ng-controller="billControl">
+  <form novalidate class="simple-form"
+	<p>Titre: <input type="text" ng-message="required" ng-model="bill.title"/><br/></p>
+	<p>Date: <input type="date"  ng-model="bill.date"/><br/></p>
+    <p>Description: <textarea ng-model="bill.description"></textarea></p>
+    <p> Mode:
+    <select ng-model="bill.mode" ng-change="updateMode()">
+      <option value="egal" selected="selected">équitable</option>
+      <option value="fix">fixé</option>
+    </select></p>
+</p>
+	<p>Nouveau preteur:<input type="text" ng-message="required" ng-model="lendertmp"/><br/>
+	<p>Montant avancé : <input type="number" ng-model="amountProvided"/><br/>
+	  <input type="button" ng-click="addLender(lendertmp,amountProvided)" value="Ajouter"/></p>
+    <div ng-repeat="lender in bill.lenders">
+      <p>Nom : {{lender.user}} montant : {{lender.amount}} <input type="button" ng-click="deleteLender(lender)" value="X"/></p>
+      
+    </div>
+    <p>Nouvel endetté :<input type="text" ng-model="indebtedtmp"/><br/></p>
+    <p ng-show="secondfield">Montant fixé : <input type="number" ng-model="fixedAmount"/><br/></p>
+    <p><input type="button" ng-click="addIndebted(indebtedtmp,fixedAmount)" value="Ajouter" /></p>
+    
+    <div ng-repeat="indebt in bill.indebted">
+      <p>{{indebt.user}} dois {{indebt.amount}}  <input type="button" ng-click="deleteIndebted(indebt)" value="X"/></p>
+    </div>
+    <input type="submit" ng-click="update(bill)" value="Valider" />
+    total:{{bill.amount}}
+  </form>
+</div>
+
+<script src="bill.js" type="text/javascript"></script>
+
+
+</html>
