@@ -8,7 +8,10 @@ var DebtSchema = new Schema({
 	lender: String,
 	indebted: String,
 	amount: 0,
-	transactions: [],
+	transactions: {type : [{ 
+		bill : String,
+		amount : 0
+	}]},
 	list_bill_amount : { type : [{
 		bill : String,
 		amount : 0
