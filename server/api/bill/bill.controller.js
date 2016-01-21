@@ -11,7 +11,14 @@ exports.index = function(req, res) {
 };
 
 exports.indexId = function(req, res) {
-  Bill.find({"bill._id" :req.params._id},function (err, Bills) {
+  Bill.find({"_id" :req.params._id},function (err, Bills) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(Bills);
+  });
+};
+
+exports.billFromGroup = function(req, res) {
+  Bill.find({"group_owner_id" :req.params.group_id},function (err, Bills) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(Bills);
   });

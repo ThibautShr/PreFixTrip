@@ -12,10 +12,14 @@ var BillSchema = new Schema({
 		user : String,
 		amount : 0
 		}]},
-	lender: { type : [{
+	lenders: { type : [{
 		user : String,
-		amount : 0
+		amount : 0,
+		part: 0
 		}]},
+	acquitted: { type : [{
+		user : String
+	}]},
 	group_owner_id: String,
 	description: String,
 	mode: String,

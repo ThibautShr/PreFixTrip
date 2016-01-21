@@ -25,7 +25,7 @@ var bill1 = new Bill( {
 	title: "Test Bill",
 	amount: 1,
 	indebted: ["User2"],
-	acquitted: [],
+	lenders: [],
 	group_owner_id: "Group0",
 	description: "description test",
 	mode: 1,

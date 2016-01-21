@@ -17,6 +17,36 @@ exports.indexId = function(req, res) {
   });
 };
 
+
+exports.lender = function(req, res) {
+  Debt.find({"lender" :req.params.lender},function (err, Debts) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(Debts);
+  });
+};
+
+exports.indebted = function(req, res) {
+  Debt.find({"indebted" :req.params.indebted},function (err, Debts) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(Debts);
+  });
+};
+
+exports.debtBtwLenderIndebted = function(req, res) {
+  Debt.find({"indebted" :req.params.indebted, "lender" : req.params.lender },function (err, Debts) {
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(Debts);
+  });
+};
+
+exports.debtFromUser = function(req, res) {
+  Debt.find( { $or:[ {"lender" :req.params.user} , {"indebted" :req.params.user} ] } ,function (err, Debts) {
+    if(err) { return handleError(res, err); }
+	return res.status(200).json(Debts);
+  });
+};
+
+
 exports.findByBillId = function(req, res) {
   Debt.find({list_bill_amount: { $elemMatch: { bill : req.params.bill_id }}},function (err, Debts) {
     if(err) { return handleError(res, err); }
