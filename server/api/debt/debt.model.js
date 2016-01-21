@@ -5,8 +5,8 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var DebtSchema = new Schema({
-	lender: String,
-	indebted: String,
+	lender: { type : String, required: true},
+	indebted: { type : String, required: true},
 	amount: 0,
 	transactions: {type : [{ 
 		bill : String,
