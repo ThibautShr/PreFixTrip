@@ -25,7 +25,7 @@
 	<p>Montant avancé : <input type="number" ng-model="amountProvided"/><br/>
 	  <input type="button" ng-click="addLender(lendertmp,amountProvided)" value="Ajouter"/></p>
     <div ng-repeat="lender in bill.lenders">
-      <p>Nom : {{lender.user}} montant : {{lender.amount}} <input type="button" ng-click="deleteLender(lender)" value="X"/></p>
+      <p>Nom : {{lender.user}} montant : {{lender.amount}}  part: {{lender.part}} participate:{{lender.participate}} <input type="button" ng-click="deleteLender(lender)" value="X"/><input type="checkbox" ng-click="selfish(lender)"></p>
       
     </div>
     <p>Nouvel endetté :<input type="text" ng-model="indebtedtmp"/><br/></p>
@@ -35,7 +35,7 @@
     <div ng-repeat="indebt in bill.indebted">
       <p>{{indebt.user}} dois {{indebt.amount}}  <input type="button" ng-click="deleteIndebted(indebt)" value="X"/></p>
     </div>
-    <input type="submit" ng-click="update(bill)" value="Valider" />
+    <input type="submit" ng-click="finish(bill)" value="Valider" />
     total:{{bill.amount}}
   </form>
 </div>
