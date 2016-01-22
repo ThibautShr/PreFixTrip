@@ -5,6 +5,6 @@
 module.exports = {
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/scrumboard-test'
+    uri: 'mongodb://localhost/ThibautShr_PreFixTrip'
   }
 };
