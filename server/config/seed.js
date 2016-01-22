@@ -9,6 +9,5 @@ var User = require('../api/users/users.model');
 User.find({}).remove(function() {});
 	
 var Group = require('../api/group/group.model');
-
 Group.find({}).remove(function() {});
 

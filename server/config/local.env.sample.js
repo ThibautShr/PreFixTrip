@@ -6,8 +6,8 @@
 // You will need to set these on the server you deploy to.
 
 module.exports = {
-  DOMAIN:           'http://localhost:9000',
-  SESSION_SECRET:   'scrumboard-secret',
+  DOMAIN:           'http://localhost:3000',
+  SESSION_SECRET:   'prefixtrip-secret',
 
   GOOGLE_ID:        'app-id',
   GOOGLE_SECRET:    'secret',

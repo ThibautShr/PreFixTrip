@@ -28,20 +28,20 @@ var app = angular.module('PreFixTripApp', [ 'ngLoadScript']);
 
 app.controller('MainCtrl',function($scope, $http){
 	
-	if(sessionStorage.token != undefined){
+	/*if(sessionStorage.token != undefined){
 		//user connected
 		$scope.user = JSON.parse(sessionStorage.user);
 		//alert(sessionStorage.user);
 		$scope.token = JSON.parse(sessionStorage.token);
 		document.location.href = "home.html";
-	}
+	}*/
 	
 	$scope.sessionInactive = function(){
 		alert('Votre session à expiré, veulliez vous reconnecter !');
 		document.location.href = "index.html";
 	}
 
-	$scope.makeFakeAccount = function(){
+	/*$scope.makeFakeAccount = function(){
 		$http.post('api/users/',{"pseudo": "titi",
 								 "email": "titi@gmail.com",
 								 "password" : "titi",
@@ -58,7 +58,7 @@ app.controller('MainCtrl',function($scope, $http){
 								 "paypal" : ""});	
 	}
 	
-	$scope.makeFakeAccount();
+	$scope.makeFakeAccount();*/
 	
 	$scope.checkLogin = function(){		
 		var reg_mail = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
