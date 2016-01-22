@@ -13,7 +13,7 @@ router.get('/indebted/:indebted', controller.indebted);
 router.get('/btw/:lender/:indebted', controller.debtBtwLenderIndebted );
 router.get('/:_id', controller.show);
 router.get('/search/:bill_id', controller.findByBillId);
-router.post('/', auth.isAuthenticated(), controller.create);
+router.post('/', controller.create);
 router.put('/:_id', auth.isAuthenticated(), controller.update);
 router.patch('/:_id', auth.isAuthenticated(), controller.update);
 router.delete('/:_id', auth.isAuthenticated(), controller.destroy);

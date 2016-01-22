@@ -23,7 +23,6 @@ var BillSchema = new Schema({
 	group_owner_id: String,
 	description: String,
 	mode: String,
-	date: String,
 	linkedFiles: []
 	
 });

@@ -195,9 +195,8 @@ app.controller('HomeCtrl', function($scope, $http){
 	$scope.selectGroup = function(index){
 		$scope.indexCurrentGroup = index;
 		$scope.page = "users.html";
-
 	}
-	
+
 	$scope.loadGroups = function(){
 		$http.get('api/group/user/'+$scope.user['pseudo'],{ 
 			headers: {'Authorization' : 'Bearer ' + $scope.token}}).
@@ -215,9 +214,49 @@ app.controller('HomeCtrl', function($scope, $http){
 	}
 
 	$scope.loadGroups();
-	$scope.loadBills();
-	$scope.loadDebts();
 	
+
+	$scope.loadBills = function(){
+		$http.get('api/bill/fromGroup/'+$scope.groups[$scope.indexCurrentGroup]['_id'],{ 
+			headers: {'Authorization' : 'Bearer ' + $scope.token}}).
+			success(function(data) {
+				alert(JSON.stringify(data));
+				$scope.bills = data;
+				alert(JSON.stringify($scope.bills));
+			}).
+			error(function(resultat, statut, erreur){
+				if(statut == "401")
+					$scope.sessionInactive();
+				alert(JSON.stringify(resultat,null,4));
+			}.bind(this));	
+	}
+
+	$scope.clickBill = function(){
+		$scope.page='bills.html';
+		$scope.loadBills();
+	}
+
+	$scope.loadDebts = function(){
+		$http.get('api/debt/fromUser/'+$scope.user['pseudo'],{ 
+			headers: {'Authorization' : 'Bearer ' + $scope.token}}).
+			success(function(data) {
+				if(data.length>0){
+					$scope.debts = data;
+				}
+			}).
+			error(function(resultat, statut, erreur){
+				if(statut == "401")
+					$scope.sessionInactive();
+				alert(JSON.stringify(resultat,null,4));
+			}.bind(this));	
+	}
+
+	$scope.clickDebts = function(){
+		$scope.page='debts.html';
+		$scope.loadDebts();
+		$scope.loadBills();
+	}
+
 	$scope.rejoinGroup = function(){
 		if($scope.newGroupName != undefined && $scope.newGroupPassword != undefined){
 			//we are looking for the group with the good name
@@ -376,7 +415,7 @@ app.controller('HomeCtrl', function($scope, $http){
 	$scope.getAlreadyPayed = function(debt,bill){
 		var payed = 0;
 		for(var i=0; i<debt['transactions'].length; ++i){
-			if(debt['transactions'][i]['bill'] == bill)
+			if(debt['transactions'][i]['bill_id'] == bill)
 				payed += debt['transactions'][i]['amount'];	
 		}
 		
@@ -391,7 +430,7 @@ app.controller('HomeCtrl', function($scope, $http){
 	}
 	
 	$scope.updateDebts = function(index){
-		$http.put('api/debts/' + $scope.debts[index]['_id'],
+		$http.put('api/debt/' + $scope.debts[index]['_id'],
 		$scope.debts[index],
 		{ headers: {'Authorization' : 'Bearer ' + $scope.token}}).
 		error(function(resultat, statut, erreur){
@@ -485,29 +524,29 @@ app.controller('HomeCtrl', function($scope, $http){
 	
 	$scope.fetchAmount = function(listAmount){
 		for(var i=0; i<listAmount.length; ++i){
-			if(listAmount[i]['bill'] == $scope.currentBill['_id'])
+			if(listAmount[i]['bill_id'] == $scope.currentBill['_id'])
 				return listAmount[i]['amount'];	
 		}
 	}
 	
 	$scope.showDebts = function(bill){
-		/*$http.get('api/debs/search/' + bill['_id'],
+		$http.get('api/debt/search/' + bill['_id'],
 		{ headers: {'Authorization' : 'Bearer ' + $scope.token}}).
 		success(function(data){
 			$scope.groupDebts = data;
 			$scope.currentBill = bill;
-			page = "groupDebts.html";
+			$scope.page = "groupDebts.html";
 		}).
 		error(function(resultat, statut, erreur){
 			if(statut == "401")
 				$scope.sessionInactive();
 			alert(JSON.stringify(resultat,null,4));
-		});*/
+		});
 		
 		//$scope.groupDebts = data;
 		
-		$scope.currentBill = bill;
-		$scope.page = "groupDebts.html";
+		//$scope.currentBill = bill;
+		//$scope.page = "groupDebts.html";
 	}
 	
 	$scope.billPayedState = "";
@@ -630,7 +669,7 @@ app.controller('DebtsController', function($scope, $http){
 	
 	$scope.getTotalAmount = function(debt,bill){
 		for(var i=0; i<debt['list_bill_amount'].length; ++i){
-			if(debt['list_bill_amount'][i]['bill'] == bill)
+			if(debt['list_bill_amount'][i]['bill_id'] == bill)
 				return debt['list_bill_amount'][i]['amount'];	
 		}
 	}
@@ -668,13 +707,13 @@ app.controller('DebtsController', function($scope, $http){
 
 	$scope.signalizedPayment = function(debt){
 		if($scope.paymentAmount != undefined && $scope.paymentAmount != ""){
-			if(parseInt($scope.paymentAmount) + $scope.getAmountTransactions(debt,$scope.billSelected['bill']) > $scope.getTotalAmount(debt,$scope.billSelected['bill']))
+			if(parseInt($scope.paymentAmount) + $scope.getAmountTransactions(debt,$scope.billSelected['bill_id']) > $scope.getTotalAmount(debt,$scope.billSelected['bill_id']))
 				alert('le montant est trop grand !');
 			else{
 				for(var i=0; i<$scope.debts.length; ++i){
 					if($scope.debts[i]['_id'] == debt['_id']){
-						$scope.debts[i]['transactions'].push({'bill' : $scope.billSelected['bill'], 'amount' : parseInt($scope.paymentAmount)});
-						//$scope.updateDebts(i);
+						$scope.debts[i]['transactions'].push({'bill' : $scope.billSelected['bill_id'], 'amount' : parseInt($scope.paymentAmount)});
+						$scope.updateDebts(i);
 						return i;
 					}
 				}
@@ -745,12 +784,6 @@ var indebted =[]
     $scope.bill.amount=0
     $scope.subtotal=0
     $scope.left=0
-
-    $scope.bill.title = 'Facture'
-    $scope.bill.date = '22/01/2016'
-    $scope.bill.description = 'Desc'
-    $scope.amountProvided = 50
-    $scope.fixedAmount = 1
 
     $scope.addLender=function(lendername,amountLent){
 	if (amountLent>0){
@@ -1055,11 +1088,11 @@ var upDebt = function(bill){
 						var tmpDebt = {};
 						/*if(debt.length > 0)
 							tmpDebt = debt[0];*/
-						
-						tmpDebt.list_bill_amount = {
-							bill : bill._id,
+
+						tmpDebt.list_bill_amount = [{
+							bill_id : bill._id,
 							amount: amount
-						}
+						}]
 						
 						//if(debt.length > 0){
 							tmpDebt.amount = amount;	
@@ -1075,17 +1108,16 @@ var upDebt = function(bill){
 							tmpDebt.indebted = bill.indebted[j].user;
 							$http.post("api/debt/" , tmpDebt, { headers: {'Authorization' : 'Bearer ' + $scope.token}}).
 							success(function(data) {
-								alert(JSON.stringify(data));
 								
 								find = false;
 								for(var i=0; i<$scope.groupDebts.length; ++i){
-									if($scope.groupDebts[i]['_id'] == data[0]['_id']){
+									if($scope.groupDebts[i]['_id'] == data['_id']){
 										$scope.groupDebts[i] = data;
 										find = true;
-										if(data[0]['lender'] == user['pseudo'] || data[0]['indebted'] == user['pseudo']){
+										if(data['lender'] == $scope.user['pseudo'] || data['indebted'] == $scope.user['pseudo']){
 											for(var j=0; j<$scope.debts.length; ++j){
-												if($scope.debts[j]['_id'] == data[0]['_id']){
-													$scope.debts[j] = data[0];
+												if($scope.debts[j]['_id'] == data['_id']){
+													$scope.debts[j] = data;
 												}	
 											}
 										}
@@ -1093,7 +1125,7 @@ var upDebt = function(bill){
 								}
 								if(!find){
 									$scope.groupDebts.push(data);
-									if(data[0]['lender'] == user['pseudo'] || data[0]['indebted'] == user['pseudo'])
+									if(data['lender'] == $scope.user['pseudo'] || data['indebted'] == $scope.user['pseudo'])
 										$scope.debts.push(data);
 								}
 								
@@ -1118,13 +1150,19 @@ $scope.finish=function(bill){
 			}
 		}
 		$scope.update(bill)
-
+		bill.group_owner_id = $scope.groups[$scope.indexCurrentGroup]['_id'];
+		bill.payed = '0';
 
 	    $http.post('api/bill/', bill,
 	    	{ headers: {'Authorization' : 'Bearer ' + $scope.token}}).
 			success(function(data) {
-				alert(JSON.stringify(data));
-				$scope.bills.push(data);
+				upDebt(data);
+				
+				alert('Facture créée !');
+
+			    $scope.amountProvided = ''
+			    $scope.fixedAmount = ''
+			    $scope.bill = new Object();
 			}).
 			error(function(resultat, statut, erreur){
 				if(statut == "401")
@@ -1133,10 +1171,9 @@ $scope.finish=function(bill){
 				alert(statut);
 			})
 
-		upDebt(bill)	
 	}
 	else{
-		alert("facture vide")
+		alert("Facture vide")
 	}
 }
 

@@ -15,7 +15,7 @@ var Debt = new Debt({
 	amount: 1,
 	transactions: [],
 	list_bill_amount : [{
-		bill : "Bill1",
+		bill_id : "Bill1",
 		amount : 0
 		}]
 	

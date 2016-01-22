@@ -51,10 +51,10 @@
                 <ul class="menu-container white-box">
                     <li ng-class="{ 'active' : page == 'account.html' }" ng-click="page='account.html'">Mon compte</li>
                     <li ng-class="{ 'active' : page == 'dashboard.html' }" ng-click="page='dashboard.html'">Tableau de bord</li>
-                    <li ng-class="{ 'active' : page == 'debts.html' }" ng-click="page='debts.html'">Transactions</li>
+                    <li ng-class="{ 'active' : page == 'debts.html' }" ng-click="clickDebts()">Transactions</li>
                     <li ng-class="{ 'active' : page == 'users.html' }" ng-click="page='users.html'">Membres</li>
-                    <li ng-class="{ 'active' : page == 'bills.html' }" ng-click="page='bills.html'">Factures</li>
-                    <li ng-class="{ 'active' : page == 'AddBillForm.html' }" ng-click="page='AddBillForm.html'">Test</li>
+                    <li ng-class="{ 'active' : page == 'bills.html' }" ng-click="clickBill()">Factures</li>
+                    <li ng-class="{ 'active' : page == 'AddBillForm.html' }" ng-click="page='AddBillForm.html'">Facturation</li>
                 </ul>
             </center>
             

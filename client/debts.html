@@ -27,7 +27,7 @@
                 <div class="row">
                     <p class="col-md-3">Factures </p>
                     <label class="col-md-9 blue-box" ng-repeat="billInfo in debt['list_bill_amount']">
-                    	{{ getTitleBill(billInfo['bill']) }} ({{ billInfo['amount'] - getAlreadyPayed(debt,billInfo['bill']) }} €)
+                    	{{ getTitleBill(billInfo['bill_id']) }} ({{ billInfo['amount'] - getAlreadyPayed(debt,billInfo['bill']) }} €)
                 	</label>
                 </div>
                 
@@ -43,7 +43,7 @@
                 
                 <div ng-show="debt['amount'] > sum(debt['transactions']) && debt['lender'] == user['pseudo']" >
                     
-                    <select ng-model="billSelected" ng-options="getTitleBill(billAmount['bill']) for billAmount in debt.list_bill_amount" class="width-200px form-control">
+                    <select ng-model="billSelected" ng-options="getTitleBill(billAmount['bill_id']) for billAmount in debt.list_bill_amount" class="width-200px form-control">
                     </select>
                     
                     <input type="number" ng-model="paymentAmount" class="margin-top-10px inline-block width-200px form-control" placeholder="Montant du versement"/>

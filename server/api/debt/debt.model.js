@@ -13,7 +13,8 @@ var DebtSchema = new Schema({
 		amount : 0
 	}]},
 	list_bill_amount : { type : [{
-		bill : String,
+		_id : String,
+		bill_id : String,
 		amount : 0
 		}
 	]}

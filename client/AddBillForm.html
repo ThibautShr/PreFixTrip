@@ -11,8 +11,6 @@
 
             <input class="form-control margin-top-10px" type="text" placeholder="Titre" ng-message="required" ng-model="bill.title"/>
             
-            <input class="form-control margin-top-10px" type="date" placeholder="Date" ng-model="bill.date"/>
-            
             <textarea class="form-control margin-top-10px" placeholder="Description" ng-model="bill.description"></textarea>
             
             <p class="margin-top-10px"> Mode </p>
@@ -36,6 +34,7 @@
                 <label class="margin-left-10px">montant : </label>
                 <b class="pink margin-left-10px">{{lender.amount}} €</b>  
                 <input type="checkbox" class="margin-left-10px" ng-click="selfish(lender)"/>
+                <label class="margin-left-10px">Exclu du paiement</label>
               </div>
             </div>
             
@@ -48,14 +47,14 @@
             <p><input class="btn btn-info margin-top-10px" type="button" ng-click="addIndebted(indebtedtmp,fixedAmount)" value="Ajouter" /></p>
 
             <div ng-repeat="indebt in bill.indebted">
-              <p>{{indebt.user}} dois {{indebt.amount}}  <i class="fa fa-close red pointer" ng-click="deleteIndebted(indebt)"></i></p>
+              <p>{{indebt.user}} dois {{indebt.amount}} €<i class="fa fa-close red pointer" ng-click="deleteIndebted(indebt)"></i></p>
             </div>
 
             <button class="btn btn-info margin-top-10px" ng-click="finish(bill)">Valider</button><br/>
             
             <p class="margin-top-10px">Total : <b class="pink">{{bill.amount}} €</b></p>
 
-            <p ng-show="secondfield">montant total fixé :{{subtotal}}</p>
+            <p ng-show="secondfield">montant total fixé :{{subtotal}} €</p>
           </form>
         </div>
       </div>

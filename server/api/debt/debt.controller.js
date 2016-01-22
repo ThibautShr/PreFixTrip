@@ -48,10 +48,23 @@ exports.debtFromUser = function(req, res) {
 
 
 exports.findByBillId = function(req, res) {
-  Debt.find({list_bill_amount: { $elemMatch: { bill : req.params.bill_id }}},function (err, Debts) {
+  var result = [];
+  Debt.find(function (err, Debts) {
+    if(err) { return handleError(res, err); }
+
+    for(var i=0; i<Debts.length; ++i){
+      for(var j=0; j<Debts[i]['list_bill_amount'].length; ++j){
+        if(Debts[i]['list_bill_amount'][j] != null && Debts[i]['list_bill_amount'][j]['bill_id'] == req.params.bill_id)
+          result.push(Debts[i]);
+      }
+    }
+    return res.status(200).json(result);
+
+  });
+  /*Debt.find({list_bill_amount: { $elemMatch: { bill : req.params.bill_id }}},function (err, Debts) {
     if(err) { return handleError(res, err); }
     return res.status(200).json(Debts);
-  });
+  });*/
 };
 
 exports.show = function(req, res) {
@@ -63,14 +76,22 @@ exports.show = function(req, res) {
 };
 
 exports.create = function(req, res) {
-  Debt.find({"indebted" :req.params.indebted, "lender" : req.params.lender },function (err, Debts) {
+  Debt.find({"indebted" :req.body.indebted, "lender" : req.body.lender },function (err, Debts) {
     if(Debts.length > 0){
       if(req.body._id) {
         delete req.body.id;
       }
-      var p = new Debt(req.body);
-      p.amount += Debts[0].amount;
+
+      var p = new Object();
+      p.lender = Debts[0].lender;
+      p.indebted = Debts[0].indebted;
+      p.amount = Debts[0].amount + req.body.amount;
+      p.transactions = Debts[0].transactions;
+      Debts[0].list_bill_amount.push(req.body.list_bill_amount[0]);
+      p.list_bill_amount = Debts[0].list_bill_amount;
+
       console.log(p);
+
       Debt.findOneAndUpdate(Debts[0]._id, p, {upsert: true, new: true}, function(err, doc){
         if(err){
           return handleError(res, err);
