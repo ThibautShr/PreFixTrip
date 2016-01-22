@@ -1,3 +1,4 @@
+
 <html lang="en">
  <script type="text/javascript" src="bower_components/angular/angular.js"></script>
 <head>
@@ -22,21 +23,21 @@
     </select></p>
 </p>
 	<p>Nouveau preteur:<select ng-message="required" ng-model="lendertmp"/><option ng-repeat="someone in group.users">{{someone.pseudo}}</option></select><br/>
-	<p>Montant avancé : <input type="number" ng-model="amountProvided"/><br/>
+	<p>Montant avancé : <input type="number" min=0 ng-model="amountProvided"/><br/>
 	  <input type="button" ng-click="addLender(lendertmp,amountProvided)" value="Ajouter"/></p>
     <div ng-repeat="lender in bill.lenders">
-      <p>Nom : {{lender.user}} montant : {{lender.amount}}  part: {{lender.part}} participate:{{lender.participate}} <input type="button" ng-click="deleteLender(lender)" value="X"/><input type="checkbox" ng-click="selfish(lender)"></p>
+      <p>Nom : {{lender.user}} montant : {{lender.amount}}  <input type="button" ng-click="deleteLender(lender)" value="X"/> <input type="checkbox" ng-click="selfish(lender)"></p>
       
     </div>
-    <p>Nouvel endetté :<select ng-message="required" ng-model="lendertmp"/><option ng-repeat="someone in group.users">{{someone.pseudo}}</option></select><br/>
-    <p ng-show="secondfield">Montant fixé : <input type="number" ng-model="fixedAmount"/><br/></p>
+    <p>Nouvel endetté :<select ng-message="required" ng-model="indebtedtmp"/><option ng-repeat="someone in group.users">{{someone.pseudo}}</option></select><br/>
+    <p ng-show="secondfield">Montant fixé : <input type="number" min=0  ng-model="fixedAmount"/><br/></p>
     <p><input type="button" ng-click="addIndebted(indebtedtmp,fixedAmount)" value="Ajouter" /></p>
     
     <div ng-repeat="indebt in bill.indebted">
       <p>{{indebt.user}} dois {{indebt.amount}}  <input type="button" ng-click="deleteIndebted(indebt)" value="X"/></p>
     </div>
     <input type="submit" ng-click="finish(bill)" value="Valider" />
-    total:{{bill.amount}}
+    total:{{bill.amount}} <p ng-show="secondfield">montant total fixé :{{subtotal}}</p>
   </form>
 </div>
 
