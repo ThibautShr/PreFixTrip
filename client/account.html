@@ -1,0 +1,14 @@
+<label class="margin-left-10px title"><i class="fa fa-user"></i> Mon compte </label>
+
+<div class="separator"></div>
+
+<div ng-controller="AccountController" class="margin-top-30px">
+    <div class="container row center-content">
+        <div class="margin-top-10px white-box padding-10px">
+        	<label>{{user['pseudo']}}</label><br/>
+            <input type="text" ng-model="newEmail" class="form-control margin-top-10px" placeholder="email"/>
+            <input type="text" ng-model="newPaypal" class="form-control margin-top-10px" placeholder="paypal"/>
+            <button class="btn btn-info margin-top-10px" ng-click="updateUser()">Actualiser</button>
+        </div>
+    </div>
+</div>

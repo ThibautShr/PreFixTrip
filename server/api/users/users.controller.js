@@ -105,6 +105,34 @@ exports.changePassword = function(req, res, next) {
 	});
 };
 
+exports.updateUser = function(req, res, next) {
+	var userId = req.params.id;
+	
+	if(req.body.email != undefined && req.body.paypal != undefined){
+		var email = String(req.body.email);
+		var paypal = String(req.body.paypal);
+	}
+	
+	User.findById(userId, function (err, user) {
+		user.email = email;
+		user.paypal = paypal;
+		user.save(function(err) {
+			if (err) return validationError(res, err);
+				res.status(200).send("OK");
+		});
+	});
+	
+	/*var user = new User(req.body);
+	if(req.body._id)
+		delete req.body._id;
+	User.findOneAndUpdate(req.params.id, user, function(err, doc){
+		if(err)
+		  return validationError(res, err);
+
+		return res.status(200).json(doc);
+	});*/
+};
+
 /**
  * Get my info
  */

@@ -1,4 +1,5 @@
 <label class="margin-left-10px title"><i class="fa fa-file"></i> Factures du groupe "{{groups[indexCurrentGroup]['name']}}"</label>
+<button ng-click="alert('ok');page='BillForm.html';alert(page)" class="btn btn-info">Créer une facture</button>
 
 <div class="separator"></div>
 
@@ -23,7 +24,7 @@
                 
                 <div class="row">
                     <p class="col-md-3">Payeurs </p>
-                    <label class="col-md-9 blue-box" ng-repeat="lender in bill['lender']">{{lender['user']}}</label>
+                    <label class="col-md-9 blue-box" ng-repeat="lender in bill['lenders']">{{lender['user']}}</label>
                 </div>
                 
                 <div class="row">

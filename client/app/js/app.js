@@ -28,6 +28,14 @@ var app = angular.module('PreFixTripApp', [ 'ngLoadScript']);
 
 app.controller('MainCtrl',function($scope, $http){
 	
+	/*if(sessionStorage.token != undefined){
+		//user connected
+		$scope.user = JSON.parse(sessionStorage.user);
+		//alert(sessionStorage.user);
+		$scope.token = JSON.parse(sessionStorage.token);
+		document.location.href = "home.html";
+	}*/
+	
 	$scope.sessionInactive = function(){
 		alert('Votre session à expiré, veulliez vous reconnecter !');
 		document.location.href = "index.html";
@@ -36,15 +44,18 @@ app.controller('MainCtrl',function($scope, $http){
 	$scope.makeFakeAccount = function(){
 		$http.post('api/users/',{"pseudo": "titi",
 								 "email": "titi@gmail.com",
-								 "password" : "titi"});
+								 "password" : "titi",
+								 "paypal" : ""});
 								 
 		$http.post('api/users/',{"pseudo": "toto",
 								 "email": "toto@gmail.com",
-								 "password" : "toto"});
+								 "password" : "toto",
+								 "paypal" : ""});
 								
 		$http.post('api/users/',{"pseudo": "tutu",
 								 "email": "tutu@gmail.com",
-								 "password" : "tutu"});	
+								 "password" : "tutu",
+								 "paypal" : ""});	
 	}
 	
 	$scope.makeFakeAccount();
@@ -103,7 +114,8 @@ app.controller('MainCtrl',function($scope, $http){
 					if($scope.password_field_registration == $scope.confirm_password_field_registration){ // Password is equlal with the cofirmation
 						new_user = {'pseudo': $scope.pseudo_field_registration,
 									'email': $scope.email_field_registration,
-									'password' : $scope.password_field_registration};
+									'password' : $scope.password_field_registration,
+									'paypal' : ''};
 						
 						//make account
 						$http.post('api/users/', new_user).
@@ -156,7 +168,7 @@ app.controller('MainCtrl',function($scope, $http){
 app.controller('HomeCtrl', function($scope, $http){	
 
 	$scope.sessionInactive = function(){
-		alert('Votre session à expiré ! Vous devez vous connecter de nouveau !');
+		alert('Problème de session ! Vous devez vous connecter de nouveau !');
 		document.location.href= "index.html";
 	}
 	
@@ -164,6 +176,14 @@ app.controller('HomeCtrl', function($scope, $http){
 	$scope.user = JSON.parse(sessionStorage.user);
 	//alert(sessionStorage.user);
 	$scope.token = JSON.parse(sessionStorage.token);
+	
+	if($scope.token == undefined)
+		document.location.href = "index.html";
+		
+	$scope.logOut = function(){
+		sessionStorage.clear();
+		document.location.href = "index.html";	
+	}
 	
 	//stock the current page
 	$scope.page = "";
@@ -208,7 +228,8 @@ app.controller('HomeCtrl', function($scope, $http){
 								data[0]['users'].push({ // We add the current user to the group 
 									'pseudo' : $scope.user['pseudo'],
 									'email' : $scope.user['email'],
-									'role' : ''
+									'role' : '',
+									'paypal' : ''
 								});
 								$scope.groups.push(data[0]);
 								$scope.indexCurrentGroup = $scope.groups.length - 1;
@@ -348,16 +369,26 @@ app.controller('HomeCtrl', function($scope, $http){
 		}
 	}
 	
-	$scope.sum = function(array){
+	$scope.getAlreadyPayed = function(debt,bill){
+		var payed = 0;
+		for(var i=0; i<debt['transactions'].length; ++i){
+			if(debt['transactions'][i]['bill'] == bill)
+				payed += debt['transactions'][i]['amount'];	
+		}
+		
+		return payed;
+	}
+	
+	$scope.sum = function(arrayTransaction){
 		var sum = 0;
-		for(var i=0; i<array.length; ++i)
-			sum += array[i];
+		for(var i=0; i<arrayTransaction.length; ++i)
+			sum += arrayTransaction[i]['amount'];
 		return sum;
 	}
 	
 	$scope.updateDebts = function(index){
-		$http.put('api/debs/' + $scope.debts[i]['_id'],
-		$scope.debts[i],
+		$http.put('api/debts/' + $scope.debts[index]['_id'],
+		$scope.debts[index],
 		{ headers: {'Authorization' : 'Bearer ' + $scope.token}}).
 		error(function(resultat, statut, erreur){
 			if(statut == "401")
@@ -369,11 +400,30 @@ app.controller('HomeCtrl', function($scope, $http){
 	$scope.debts = [{
 		'lender' : 'titi',
 		'indebted' : 'toto',
-		'amount' : 75,
+		'amount' : 150,
 		'transactions' : [],
 		'list_bill_amount' : [
-				{'bill' : '0',
-				 'amount' : 75}
+				{
+				 'bill' : '0',
+				 'amount' : 75
+				},{
+				 'bill' : '1',
+				 'amount' : 75
+				}
+			]
+	},{
+		'lender' : 'toto',
+		'indebted' : 'titi',
+		'amount' : 150,
+		'transactions' : [],
+		'list_bill_amount' : [
+				{
+				 'bill' : '0',
+				 'amount' : 75
+				},{
+				 'bill' : '1',
+				 'amount' : 75
+				}
 			]
 	}];
 
@@ -463,7 +513,7 @@ app.controller('HomeCtrl', function($scope, $http){
 			'user' : 'tutu',
 			'amount' : 75
 			}],
-		'lender' : [{
+		'lenders' : [{
 			'user' : 'toto',
 			'amount' : 150
 			}],
@@ -484,7 +534,7 @@ app.controller('HomeCtrl', function($scope, $http){
 			'user' : 'toto',
 			'amount' : 100
 			}],
-		'lender' : [{
+		'lenders' : [{
 			'user' : 'tutu',
 			'amount' : 200
 			}],
@@ -498,31 +548,117 @@ app.controller('HomeCtrl', function($scope, $http){
 		
 });
 
+app.controller('AccountController', function($scope, $http){
+
+	$scope.newEmail = $scope.user['email'];
+	$scope.newPaypal = $scope.user['paypal'];
+
+	$scope.updateUser = function(){
+			
+		$scope.user['email'] = $scope.newEmail;
+		$scope.user['paypal'] = $scope.newPaypal;	
+		//delete $scope.user['_id'];
+		$http.put('api/users/'+$scope.user['_id'],
+			$scope.user,
+			{headers: {'Authorization' : 'Bearer ' + $scope.token}}).
+			success(function(data) {
+				$scope.user = data;
+				alert('Enregistrement avec succès !');
+			}).
+			error(function(resultat, statut, erreur){
+				if(statut == "401")
+					$scope.sessionInactive();
+				alert(JSON.stringify(resultat,null,4));
+			}.bind(this));
+	}
+});
+
 app.controller('DebtsController', function($scope, $http){
 	
+	/*
+		$scope.debts = [{
+		'lender' : 'titi',
+		'indebted' : 'toto',
+		'amount' : 150,
+		'transactions' : [{
+				 'bill' : '0',
+				 'amount' : 15
+				},{
+				 'bill' : '0',
+				 'amount' : 15
+				}],
+		'list_bill_amount' : [
+				{
+				 'bill' : '0',
+				 'amount' : 75
+				},{
+				 'bill' : '1',
+				 'amount' : 75
+				}
+			]
+	}];
+	*/
+	
+	$scope.getAmountTransactions = function(debt,bill){
+		var amount = 0;
+		for(var i=0; i<debt['transactions'].length; ++i){
+			if(debt['transactions'][i]['bill'] == bill)
+				amount += debt['transactions'][i]['amount'];	
+		}
+		return amount;
+	}
+	
+	$scope.getTotalAmount = function(debt,bill){
+		for(var i=0; i<debt['list_bill_amount'].length; ++i){
+			if(debt['list_bill_amount'][i]['bill'] == bill)
+				return debt['list_bill_amount'][i]['amount'];	
+		}
+	}
+	
 	$scope.addPayment = function(debt){
-		if(parseInt($scope.paymentAmount) > (debt['amount'] - $scope.sum(debt['transactions'])))
-			alert('le montant est trop grand !');
-		else{
-			for(var i=0; i<$scope.debts.length; ++i){
-				if($scope.debts[i]['_id'] == debt['_id']){
-					$scope.debts[i]['transactions'].push(parseInt($scope.paymentAmount));
-					//$scope.updateDebts(i);
-					return i;
+		var paypal = fetchPaypalAccount(debt['lender']);
+		if(paypal != undefined){
+			var siteName = "PreFixTrip";
+			var urlKO = "";
+			var urlOK = "";
+			document.location.href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business="+paypal+"&lc=FR&item_name="+siteName+"&no_shipping=1&amount="+$scope.paymentAmount+"&currency_code=EUR&cancel_return="+urlKO+"&return="+urlOK+"&cbt=Retour "+siteName+"&custom="+debt['_id'];
+		}
+		else
+			alert('Cet utilisateur n\'a pas indiqué son compte PayPal !');
+	}
+	
+	$scope.fetchPaypalAccount = function(pseudo){
+		for(var i=0; i<$scope.groups[$scope.indexCurrentGroup]['users'].length; ++i){
+			if($scope.groups[$scope.indexCurrentGroup]['users'][i]['pseudo'] == pseudo)
+				return $scope.groups[$scope.indexCurrentGroup]['users'][i]['paypal'];
+		}
+		return undefined;
+	}
+	
+	$scope.signalizedPayment = function(debt){
+		if($scope.paymentAmount != undefined && $scope.paymentAmount != ""){
+			if(parseInt($scope.paymentAmount) + $scope.getAmountTransactions(debt,$scope.billSelected['bill']) > $scope.getTotalAmount(debt,$scope.billSelected['bill']))
+				alert('le montant est trop grand !');
+			else{
+				for(var i=0; i<$scope.debts.length; ++i){
+					if($scope.debts[i]['_id'] == debt['_id']){
+						$scope.debts[i]['transactions'].push({'bill' : $scope.billSelected['bill'], 'amount' : parseInt($scope.paymentAmount)});
+						//$scope.updateDebts(i);
+						return i;
+					}
 				}
 			}
 		}
+		else
+			alert('Le montant du versement est vide !');
 	}
 });
 
 app.controller('DashboardController', function($scope, $http){
 	
-	$scope.nbTransactionCreditedPayed = 0; 
-	
+	$scope.nbTransactionCreditedPayed = 0;
 	$scope.nbTransactionCreditingPayed = 0;
-	
 	$scope.nbTransactionCreditedNotPayed = 0;
-	
 	$scope.nbTransactionCreditingNotPayed = 0;
 	
 	$scope.amountPayed = 0;
@@ -553,3 +689,151 @@ app.controller('DashboardController', function($scope, $http){
 	$scope.loadDashboard();
 
 });
+
+app.controller('billControl', ['$scope', function($scope) {
+$scope.bill = new Object()
+var nbInBill=0
+var group = ["pierre","paul","jacques"]
+var indebted =[]
+    
+    var amountLent
+    var lendertmp
+    var indebted
+   $scope.bill.lenders=[]
+    $scope.bill.indebted=[]
+    $scope.bill.amount=0
+
+
+    $scope.addLender=function(lendername,amountLent){
+	lender=new Object()
+	lender.user=lendername
+	lender.amount=amountLent
+	$scope.deleteLender(lender)
+	$scope.bill.lenders.push(lender)
+    	$scope.bill.amount=$scope.bill.amount+amountLent
+	nbInBill=nbInBill+1
+	$scope.update($scope.bill)
+}
+
+    $scope.addIndebted=function(indebtedname,fixedAmount){
+	if($scope.bill.mode=="fix"){
+		indebt=new Object()
+		indebt.user=indebtedname
+		indebt.amount=fixedAmount
+		$scope.deleteIndebted(indebt)
+		$scope.bill.indebted.push(indebt)
+		nbInBill=nbInBill+1
+		$scope.update($scope.bill)
+	}
+	if($scope.bill.mode=="egal"){
+		indebt=new Object()
+		indebt.user=indebtedname
+		$scope.deleteIndebted(indebt)
+		$scope.bill.indebted.push(indebt)
+		nbInBill=nbInBill+1
+		$scope.update($scope.bill)
+	}
+	
+	
+}
+    $scope.deleteIndebted=function(victim){
+		var tmptab=[]
+		for(var i= 0; i < $scope.bill.indebted.length; i++)
+		{
+		var tmp=$scope.bill.indebted[i]
+		if(tmp.user!=victim.user){
+			tmptab.push(tmp)
+		}
+		else{
+			nbInBill=nbInBill-1
+			console.log($scope.bill.amount)		
+		}
+		}
+		$scope.bill.indebted=tmptab
+	}
+
+	var deleteIndebtedPrivate=function(victim){
+		var tmptab=[]
+		for(var i= 0; i < $scope.bill.indebted.length; i++)
+		{
+		var tmp=$scope.bill.indebted[i]
+		if(tmp.user!=victim.user){
+			tmptab.push(tmp)
+		}
+		else{
+			console.log($scope.bill.amount)		
+		}
+		}
+		$scope.bill.indebted=tmptab
+	}
+	$scope.deleteLender=function(victim){
+		var tmptab=[]
+		for(var i= 0; i < $scope.bill.lenders.length; i++)
+		{
+		var tmp=$scope.bill.lenders[i]
+		if(tmp.user!=victim.user){
+			tmptab.push(tmp)
+		}
+		else{
+			nbInBill=nbInBill-1
+			$scope.bill.amount=$scope.bill.amount-tmp.amount		
+		}
+		}
+		$scope.bill.lenders=tmptab
+	}  
+	var deleteLenderPrivate=function(victim){
+		var tmptab=[]
+		for(var i= 0; i < $scope.bill.lenders.length; i++)
+		{
+		var tmp=$scope.bill.lenders[i]
+		if(tmp.user!=victim.user){
+			tmptab.push(tmp)
+		}
+		else{
+			$scope.bill.amount=$scope.bill.amount-tmp.amount		
+		}
+		}
+		$scope.bill.lenders=tmptab
+	}  
+
+
+	   
+
+    $scope.updateMode=function(){
+	$scope.secondfield=$scope.bill.mode=="fix"
+	}
+
+ $scope.update=function(bill){
+     
+    if(bill.mode=="egal"){
+	var part=bill.amount/nbInBill
+	part = part.toFixed(2)
+    var indebtedtmp = bill.indebted
+	bill.indebted=[]
+	for(var i= 0; i < indebtedtmp.length; i++)
+	{
+	    indebt=new Object()
+	    indebt=indebtedtmp[i]
+	    indebt.amount=part
+	    $scope.deleteIndebted(indebt)
+	    bill.indebted.push(indebt)
+	}
+	for(var i= 0; i < bill.lenders.length; i++)
+	{
+	    tmp=bill.lenders[i]
+	    if(tmp.amount<part){
+		indebt=new Object()
+		indebt.user=tmp.user
+		indebt.amount=part-tmp.amount
+		deleteIndebtedPrivate(indebt)
+		bill.indebted.push(indebt)
+	    }
+	    
+	}
+    }
+
+	if(bill.mode=="fix"){
+    }
+}
+
+}]);
