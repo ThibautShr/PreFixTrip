@@ -63,10 +63,29 @@ exports.show = function(req, res) {
 };
 
 exports.create = function(req, res) {
-  Debt.create(req.body, function(err, Debt) {
-    if(err) { return handleError(res, err); }
-    return res.status(201).json(Debt);
-  });
+  Debt.find({"indebted" :req.params.indebted, "lender" : req.params.lender },function (err, Debts) {
+    if(Debts.length > 0){
+      if(req.body._id) {
+        delete req.body.id;
+      }
+      var p = new Debt(req.body);
+      p.amount += Debts[0].amount;
+      console.log(p);
+      Debt.findOneAndUpdate(Debts[0]._id, p, {upsert: true, new: true}, function(err, doc){
+        if(err){
+          return handleError(res, err);
+        }
+        return res.status(200).json(doc);
+      });
+    }
+    else{
+      Debt.create(req.body, function(err, Debt) {
+      if(err) { return handleError(res, err); }
+        console.log(Debt);
+        return res.status(201).json(Debt);
+      });
+    }
+  })
 };
 
 exports.update = function(req, res) {

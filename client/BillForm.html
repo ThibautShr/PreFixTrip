@@ -1,17 +1,5 @@
 
-<html lang="en">
- <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-<head>
-	<meta charset="UTF-8">
-	<title>Creation de Facture</title>
-</head>
-<body>
-
-<header>
-	<H1>Facture</H1>
-</header>
-
-<div ng-app="billManager" ng-controller="billControl">
+<div ng-controller="billControl">
   <form novalidate class="simple-form"
 	<p>Titre: <input type="text" ng-message="required" ng-model="bill.title"/><br/></p>
 	<p>Date: <input type="date"  ng-model="bill.date"/><br/></p>
@@ -40,8 +28,3 @@
     total:{{bill.amount}} <p ng-show="secondfield">montant total fixé :{{subtotal}}</p>
   </form>
 </div>
-
-<script src="bill.js" type="text/javascript"></script>
-
-
-</html>

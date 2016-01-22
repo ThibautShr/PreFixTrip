@@ -25,7 +25,7 @@
               <option ng-repeat="someone in groups[indexCurrentGroup].users">{{someone.pseudo}}</option>
             </select>
             
-            <input class="form-control margin-top-10px" placeholder="Montant avancé" type="number" ng-model="amountProvided"/>
+            <input class="form-control margin-top-10px" placeholder="Montant avancé" type="number" min=0 ng-model="amountProvided"/>
             <input class="btn btn-info margin-top-10px" type="button" ng-click="addLender(lendertmp,amountProvided)" value="Ajouter"/>
             
             <div ng-repeat="lender in bill.lenders">
@@ -34,21 +34,17 @@
                 <label class="margin-left-10px">Nom : </label> 
                 <b class="pink margin-left-10px">{{lender.user}}</b> 
                 <label class="margin-left-10px">montant : </label>
-                <b class="pink margin-left-10px">{{lender.amount}} €</b> 
-                <label class="margin-left-10px">part : </label>
-                <b class="pink margin-left-10px">{{lender.part}} €</b> 
-                <label class="margin-left-10px">participate : </label>
-                <b class="pink margin-left-10px">{{lender.participate}} €</b> 
+                <b class="pink margin-left-10px">{{lender.amount}} €</b>  
                 <input type="checkbox" class="margin-left-10px" ng-click="selfish(lender)"/>
               </div>
             </div>
             
             <p>Nouvel endetté :
-            <select class="form-control" ng-message="required" ng-model="lendertmp">
+            <select class="form-control" ng-message="required" ng-model="indebtedtmp">
               <option ng-repeat="someone in groups[indexCurrentGroup].users">{{someone.pseudo}}</option>
             </select><br/>
             
-            <p ng-show="secondfield"><input class="form-control" type="number" placeholder="Montant fixé" ng-model="fixedAmount"/></p>
+            <p ng-show="secondfield"><input class="form-control" type="number" min=0 placeholder="Montant fixé" ng-model="fixedAmount"/></p>
             <p><input class="btn btn-info margin-top-10px" type="button" ng-click="addIndebted(indebtedtmp,fixedAmount)" value="Ajouter" /></p>
 
             <div ng-repeat="indebt in bill.indebted">
@@ -58,6 +54,8 @@
             <button class="btn btn-info margin-top-10px" ng-click="finish(bill)">Valider</button><br/>
             
             <p class="margin-top-10px">Total : <b class="pink">{{bill.amount}} €</b></p>
+
+            <p ng-show="secondfield">montant total fixé :{{subtotal}}</p>
           </form>
         </div>
       </div>
